@@ -1,0 +1,26 @@
+Global / Background (animated-bg.jsx)
+
+MeshBlobs – Three large soft blobs drift slowly across the screen (x/y motion + scale pulse)
+DotGrid – Faint dotted pattern with a radial fade mask
+GridLines – Subtle vertical/horizontal grid lines
+FloatingLeaves – Leaf SVGs drift upward with rotation and horizontal sway
+SweepBeam – A horizontal gradient beam sweeps across the section repeatedly
+Particles – Small dots float gently up and down with opacity pulses
+Navigation 7. Logo pulsing dot – A tiny green dot on the logo pulses in scale and opacity continuously
+
+Hero 8. Parallax scroll – The background image moves slower than scroll and fades out 9. Staggered fade-up – Headline, subtext, buttons, and stats fade up with a 0.08s stagger 10. Molecule SVG draw – Bond lines draw themselves (pathLength), then atoms pop in (scale) 11. ISO 9001 badge float – The floating certification badge bobs up and down gently 12. Pulse dot – The "Made in India" badge has a pulsing green indicator
+
+About 13. Image slide-in – The leaf photo slides in from the left 14. Staggered text fade-up – Heading, paragraph, and mission/vision cards fade up sequentially
+
+Products 15. Card stagger fade-up – Each product card fades in with a slight delay 16. Card hover lift – Cards lift up 6px on hover 17. Hover sweep gradient – A shimmer sweeps across the card on hover 18. Watermark numbers – Big faded index numbers (01–04) sit behind each card
+
+Process 19. Scroll-driven timeline line – The green progress line grows with scroll position 20. Step cards slide-in – Each step card slides in from the right with stagger 21. Bar chart scale-up – The mini batch-traceability bars grow from the bottom 22. Step icon hover scale – Icons scale up on card hover 23. Giant background word – The word "process" is huge and ultra-faded behind the section
+
+Quality 24. Badge scale-in – Compliance badges (ISO, GMP, USP, etc.) pop in with stagger 25. Lab image scale-in – The lab photo scales in slightly
+
+Leadership 26. Header fade-up – Title and pull-quote fade up 27. Card stagger fade-up – Three leader cards fade up with stagger 28. Asymmetric offset – The middle card sits higher than the others 29. Orbiting ring – A dashed circle around each portrait spins slowly 30. Orbiting dot – A small dot rotates around the portrait ring 31. Gradient frame hover – The card's gradient border brightens on hover
+
+Contact 32. Content fade-up – Text and info fade in 33. Form fade-up – Form fields fade in with a slight delay
+
+CSS Utilities 34. Story-link underline – Underline scales in from right to left on hover 35. Animate-pulse – Used on small indicator dots 36. Shadow transitions – Cards and buttons lift with soft/elevated shadow on hover
+
