@@ -1,85 +1,3 @@
-// import { useRef } from "react";
-// import { motion, useInView } from "framer-motion";
-// import { GridLines, Particles } from "../components/animated-bg";
-// import leafDetail from "@/assets/leaf-detail.jpg";
-// import "../responsive.css";
-
-// const EASE = [0.22, 1, 0.36, 1];
-// const fadeUp = { hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: EASE } } };
-// const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.08 } } };
-
-// const missionCards = [
-//     { t: "Our Mission", d: "Manufacture and supply high-purity nicotine and derivatives with a focus on quality, safety and environmental responsibility." },
-//     { t: "Our Vision", d: "Be the global benchmark for nicotine intermediates, driving sustainable growth through innovation and ethical practice." },
-// ];
-
-// /* ─── useAboutReveal ────────────────────────────────────────────────── */
-// function useAboutReveal() {
-//     const imageRef = useRef(null);
-//     const contentRef = useRef(null);
-
-//     const imageInView = useInView(imageRef, { once: true, margin: "-100px" });
-//     const contentInView = useInView(contentRef, { once: true, margin: "-100px" });
-
-//     const imageAnim = {
-//         initial: { opacity: 0, x: -40 },
-//         animate: imageInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -40 },
-//         transition: { duration: 0.8, ease: EASE },
-//     };
-
-//     const contentAnim = {
-//         initial: "hidden",
-//         animate: contentInView ? "show" : "hidden",
-//         variants: stagger,
-//     };
-
-//     return { imageRef, contentRef, imageAnim, contentAnim };
-// }
-
-// /* ─── About ─────────────────────────────────────────────────────────── */
-// export default function About() {
-//     const { imageRef, contentRef, imageAnim, contentAnim } = useAboutReveal();
-
-//     return (
-//         <section id="about" className="about-section relative py-16 px-6 lg:px-10 overflow-hidden">
-//             <GridLines className="opacity-60" />
-//             <Particles count={20} />
-
-//             <div className="about-grid mx-auto max-w-7xl grid lg:grid-cols-12 gap-16 items-center">
-
-//                 <motion.div ref={imageRef} className="about-image lg:col-span-5 relative" {...imageAnim}>
-//                     <div className="aspect-[4/5] rounded-[2rem] overflow-hidden shadow-elevated">
-//                         <img src={leafDetail} alt="Fresh tobacco leaf" className="w-full h-full object-cover" loading="lazy" decoding="async" />
-//                     </div>
-//                     {/* <div className="about-floatcard absolute -bottom-6 -right-6 max-w-[260px] rounded-2xl bg-background border border-border p-5 shadow-soft">
-//                         <div className="text-xs uppercase tracking-wider text-primary">Sustainably sourced</div>
-//                         <div className="mt-2 font-display text-lg leading-snug">From farm to pharma, ethically grown.</div>
-//                     </div> */}
-//                 </motion.div>
-
-//                 <motion.div ref={contentRef} className="about-content lg:col-span-7" {...contentAnim}>
-//                     <motion.div variants={fadeUp} className="text-xs uppercase tracking-[0.2em] text-primary">About Okhai Pharma</motion.div>
-//                     <motion.h2 variants={fadeUp} className="mt-4 text-4xl md:text-5xl font-display leading-tight">
-//                         A name India trusts for <em className="italic text-primary"> pure nicotine</em>.
-//                     </motion.h2>
-//                     <motion.p variants={fadeUp} className="mt-6 text-lg text-muted-foreground leading-relaxed">
-//                         Okhai Pharma is a leading name in the Indian chemical industry, recognized as an eminent manufacturer, exporter, and supplier of Pure Nicotine and Nicotine Derivatives. With a commitment to quality, innovation, and sustainability, we serve a diverse range of industries including pharmaceuticals and research sectors.
-//                     </motion.p>
-//                     <motion.div variants={fadeUp} className="about-cards mt-10 grid sm:grid-cols-2 gap-6">
-//                         {missionCards.map((m) => (
-//                             <div key={m.t} className="rounded-2xl border border-border bg-card p-6 hover:border-primary/40 hover:shadow-soft transition-all">
-//                                 <div className="font-display text-xl text-foreground">{m.t}</div>
-//                                 <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{m.d}</p>
-//                             </div>
-//                         ))}
-//                     </motion.div>
-//                 </motion.div>
-
-//             </div>
-//         </section>
-//     );
-// }
-
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { GridLines, Particles } from "../components/animated-bg";
@@ -89,6 +7,8 @@ import "../responsive.css";
 
 const EASE = [0.22, 1, 0.36, 1];
 const fadeUp = { hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: EASE } } };
+const slideLeft = { hidden: { opacity: 0, x: -80 }, show: { opacity: 1, x: 0, transition: { duration: 0.8, ease: EASE } } };
+const slideRight = { hidden: { opacity: 0, x: 80 }, show: { opacity: 1, x: 0, transition: { duration: 0.8, ease: EASE } } };
 const stagger = { hidden: {}, show: { transition: { staggerChildren: 0.08 } } };
 
 /* ─── Icons ─────────────────────────────────────────────────────────── */
@@ -259,11 +179,36 @@ export default function About() {
                     </motion.div>
                 </div>
 
-                {/* ── Row 2: Mission & Vision as separate cards spanning full width ── */}
-                <div className="grid lg:grid-cols-2 gap-8">
-                    {cards.map((card) => (
-                        <StandaloneCard key={card.key} card={card} />
-                    ))}
+                {/* ── Row 2: Mission & Vision with center separator and slide animations ── */}
+                <div className="relative">
+                    <div className="grid lg:grid-cols-2 gap-12 items-start about-mv-grid">
+                        {cards.map((card, i) => (
+                            <motion.div
+                                key={card.key}
+                                variants={i === 0 ? slideLeft : slideRight}
+                                initial="hidden"
+                                whileInView="show"
+                                viewport={{ once: true, amount: 0.35 }}
+                                transition={{ duration: 0.7, delay: i * 0.08 }}
+                                className="relative p-8 rounded-[1.5rem] flex gap-6 items-start mint-panel-container"
+                            >
+                                <div className="absolute inset-0 pointer-events-none rounded-[1.5rem] mint-panel" />
+                                <div className="absolute inset-0 pointer-events-none rounded-[1.5rem] mint-pattern" />
+                                <div className="absolute inset-0 pointer-events-none rounded-[1.5rem] mint-inner-border" />
+
+                                <div className="relative z-10 flex-shrink-0 w-16 h-16 rounded-lg bg-white/60 text-primary flex items-center justify-center">
+                                    {card.icon}
+                                </div>
+
+                                <div className="relative z-10">
+                                    <h3 className="font-display text-2xl font-semibold text-foreground mb-4">{card.label}</h3>
+                                    <p className="text-muted-foreground text-base leading-relaxed text-justify">{card.body}</p>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </div>
+
+                    <div className="mv-separator" aria-hidden="true" />
                 </div>
 
             </div>

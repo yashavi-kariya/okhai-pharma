@@ -4,8 +4,8 @@ import { useSearchParams } from "react-router-dom";
 import { FloatingLeaves, MeshBlobs, Particles } from "./animated-bg";
 import SiteNav from "./SiteHeader";
 import "../responsive.css";
-import product1 from "@/assets/products/product1.png";
-import product2 from "@/assets/products/product2.png";
+import product1 from "@/assets/products/productpage2.png";
+import product2 from "@/assets/products/productpage1.png";
 
 // Leaf card wrapper with animated organic shape
 const LeafCard = ({ children, className, animated = true, delay = 0 }) => {
@@ -153,88 +153,90 @@ export default function ProductsPage() {
                     transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
                 />
 
-                <section className="relative flex min-h-[calc(100vh-7rem)] items-center overflow-hidden pb-16">
-                    <div className="absolute inset-x-0 top-0 h-72 bg-[radial-gradient(circle_at_top,rgba(91,184,154,0.18),transparent_55%)]" />
+                <section className="relative overflow-hidden pb-16 pt-8 lg:pt-12">
+                    <div className="absolute inset-x-0 top-0 h-72 bg-[radial-gradient(circle_at_top,rgba(17,94,30,0.16),transparent_45%)]" />
                     <div className="relative mx-auto max-w-7xl px-6 lg:px-10">
                         <motion.div
                             variants={containerVariants}
                             initial="hidden"
-                            animate="visible"
-                            className="relative overflow-hidden rounded-[2.5rem] border border-border/70 bg-white/90 backdrop-blur-xl shadow-elevated p-8 lg:p-10"
+                            whileInView="visible"
+                            viewport={{ once: true, margin: "-120px" }}
+                            className="relative overflow-hidden rounded-[2.5rem] border border-border/70 bg-white/95 backdrop-blur-xl shadow-elevated p-8 lg:p-10"
                         >
-                            <div className="grid gap-8 lg:grid-cols-[1.2fr_0.95fr] items-start">
-                                <motion.div variants={itemVariants} className="space-y-10">
+                            <div className="absolute left-0 top-1/2 h-80 w-80 -translate-y-1/2 rounded-full bg-emerald-200/30 blur-3xl" />
+                            <div className="absolute right-0 top-20 h-60 w-60 rounded-full bg-slate-100/80 blur-3xl" />
+
+                            <div className="grid gap-10 lg:grid-cols-[1.1fr_0.95fr] items-center">
+                                <motion.div variants={itemVariants} className="relative z-10 space-y-6">
                                     <motion.div
                                         variants={itemVariants}
-                                        className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary"
-                                        whileHover={{ scale: 1.05 }}
-                                        whileTap={{ scale: 0.98 }}
+                                        className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-700"
                                     >
                                         Products
                                     </motion.div>
 
-                                    <motion.div variants={itemVariants} className="space-y-6">
-                                        <motion.h1
-                                            className="text-4xl md:text-5xl font-display tracking-tight text-foreground"
-                                            animate={{
-                                                backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-                                            }}
-                                            transition={{ duration: 6, repeat: Infinity }}
-                                        >
-                                            Precision nicotine products with safety and compliance built in.
-                                        </motion.h1>
-                                        <motion.p
-                                            variants={itemVariants}
-                                            className="max-w-2xl text-muted-foreground text-lg leading-8"
-                                        >
-                                            Select either Nicotine Sulphate or Nicotine Alkaloid and review the key applications, storage instructions, and handling guidelines for each product.
-                                        </motion.p>
+                                    <motion.h1
+                                        variants={itemVariants}
+                                        className="max-w-2xl text-4xl md:text-5xl font-display tracking-tight text-foreground"
+                                    >
+                                        Modern nicotine solutions crafted for premium pharmaceutical formulation.
+                                    </motion.h1>
+
+                                    <motion.p
+                                        variants={itemVariants}
+                                        className="max-w-xl text-lg leading-8 text-muted-foreground"
+                                    >
+                                        Discover elegant, compliance-focused product insights for Nicotine Sulphate and Nicotine Alkaloid, designed to support formulation excellence, handling confidence, and safe storage.
+                                    </motion.p>
+
+                                    <motion.div
+                                        variants={itemVariants}
+                                        className="grid gap-4 sm:grid-cols-2"
+                                    >
+                                        <div className="rounded-[1.75rem] border border-emerald-100 bg-emerald-50/80 p-5 shadow-soft">
+                                            <h3 className="text-sm font-semibold uppercase tracking-[0.24em] text-emerald-700">Premium grade</h3>
+                                            <p className="mt-3 text-sm text-muted-foreground leading-6">Designed for controlled pharmaceutical processing and high-purity applications.</p>
+                                        </div>
+                                        <div className="rounded-[1.75rem] border border-slate-200 bg-slate-50/80 p-5 shadow-soft">
+                                            <h3 className="text-sm font-semibold uppercase tracking-[0.24em] text-slate-900">Trusted handling</h3>
+                                            <p className="mt-3 text-sm text-muted-foreground leading-6">Clear guidance for storage, compliance, and secure supply chain workflows.</p>
+                                        </div>
+                                    </motion.div>
+
+                                    <motion.div
+                                        variants={itemVariants}
+                                        className="pt-1"
+                                    >
+                                        <button className="inline-flex items-center justify-center rounded-full bg-emerald-700 px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-700/15 transition duration-300 hover:-translate-y-0.5 hover:bg-emerald-800">
+                                            Explore product insights
+                                        </button>
                                     </motion.div>
                                 </motion.div>
 
-                                <motion.div
-                                    variants={itemVariants}
-                                    className="rounded-[2rem] border border-border/70 bg-white/95 p-6 shadow-elevated flex flex-col justify-between"
-                                    whileHover={{ boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1)" }}
-                                >
-                                    {/* <div className="space-y-5">
-                                        <motion.div variants={itemVariants}>
-                                            <p className="text-xs uppercase tracking-[0.28em] text-primary/80">
-                                                Product selector
-                                            </p>
-                                            <h2 className="mt-4 text-2xl font-semibold text-foreground">
-                                                Choose a product to explore
-                                            </h2>
-                                        </motion.div>
-
-                                        <motion.div
-                                            variants={itemVariants}
-                                            className="rounded-[2rem] border border-border/70 bg-background/80 p-5"
-                                        >
-                                            <p className="text-sm text-muted-foreground">
-                                                Compare two leading nicotine product grades and view their applications, features, and storage guidance.
-                                            </p>
-                                        </motion.div>
-                                    </div> */}
-
-                                    {/* <motion.div variants={itemVariants} className="mt-6 grid gap-3 sm:grid-cols-2">
-                                        <motion.button
-                                            onClick={() => handleProductSelect("sulfate40")}
-                                            className={`rounded-full px-5 py-3 text-sm font-semibold transition-all duration-300 ${selected === "sulfate40" ? "bg-foreground text-background shadow-elevated ring-4 ring-primary/15" : "bg-white text-foreground hover:bg-foreground/10"}`}
-                                            whileHover={{ scale: 1.05 }}
-                                            whileTap={{ scale: 0.95 }}
-                                        >
-                                            Nicotine Sulphate 40%
-                                        </motion.button>
-                                        <motion.button
-                                            onClick={() => handleProductSelect("alkaloid")}
-                                            className={`rounded-full px-5 py-3 text-sm font-semibold transition-all duration-300 ${selected === "alkaloid" ? "bg-foreground text-background shadow-elevated ring-4 ring-primary/15" : "bg-white text-foreground hover:bg-foreground/10"}`}
-                                            whileHover={{ scale: 1.05 }}
-                                            whileTap={{ scale: 0.95 }}
-                                        >
-                                            Nicotine Alkaloid 90% / 95%
-                                        </motion.button>
-                                    </motion.div> */}
+                                <motion.div variants={itemVariants} className="relative z-10">
+                                    <div className="absolute inset-0 rounded-[2rem] bg-[radial-gradient(circle_at_top,rgba(17,94,30,0.08),transparent_65%)]" />
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 30, scale: 0.98 }}
+                                        whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                                        viewport={{ once: true, margin: "-120px" }}
+                                        transition={{ duration: 0.75, ease: "easeOut" }}
+                                        whileHover={{ y: -6, scale: 1.01 }}
+                                        className="relative overflow-hidden rounded-[2rem] border border-border/70 bg-white p-6 shadow-[0_28px_80px_rgba(15,93,44,0.12)]"
+                                    >
+                                        <div className="absolute inset-x-6 top-6 h-24 rounded-[1.75rem] bg-emerald-100/70 blur-3xl" />
+                                        <div className="relative rounded-[1.75rem] overflow-hidden bg-slate-950/5">
+                                            <img
+                                                src={selected === "sulfate40" ? product1 : product2}
+                                                alt={selected === "sulfate40" ? "Nicotine Sulphate 40%" : "Nicotine Alkaloid 90% / 95%"}
+                                                className="h-[450px] w-full object-cover"
+                                            />
+                                        </div>
+                                        <div className="mt-6 space-y-3">
+                                            <p className="text-xs uppercase tracking-[0.3em] text-slate-400">{selected === "sulfate40" ? "Nicotine Sulphate 40%" : "Nicotine Alkaloid 90% / 95%"}</p>
+                                            <h3 className="text-3xl font-semibold text-foreground">Premium product presentation</h3>
+                                            <p className="max-w-md text-sm leading-7 text-muted-foreground">A focused, elegant showcase for your flagship formulation with refined clarity, subtle depth, and polished visual hierarchy.</p>
+                                        </div>
+                                    </motion.div>
                                 </motion.div>
                             </div>
                         </motion.div>

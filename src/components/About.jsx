@@ -3,7 +3,7 @@ import { useRef } from "react";
 import heroBg from "@/assets/hero-bg.jpg";
 import leafDetail from "@/assets/leaf-detail.jpg";
 import leafIcon from "@/assets/leaf.png";
-import labImg from "@/assets/lab.jpg";
+import aboutImg from "@/assets/aboutimg.png";
 import companyLogo from "@/assets/logo.png";
 import { MeshBlobs, DotGrid, GridLines, FloatingLeaves, SweepBeam, Particles } from "./animated-bg";
 import SiteNav from "./SiteHeader";
@@ -23,56 +23,76 @@ const slowStagger = {
     show: { transition: { staggerChildren: 0.18 } },
 };
 
-function AboutHero() {
-    const ref = useRef(null);
-    const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-    const y = useTransform(scrollYProgress, [0, 1], [0, 90]);
-    const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+function useAboutReveal() {
+    const imageRef = useRef(null);
+    const contentRef = useRef(null);
 
+    const imageAnim = {
+        initial: { opacity: 0, y: 40, scale: 0.98 },
+        animate: { opacity: 1, y: 0, scale: 1 },
+        transition: { duration: 0.75, ease: EASE },
+    };
+
+    const contentAnim = {
+        initial: { opacity: 0, y: 40 },
+        animate: { opacity: 1, y: 0 },
+        transition: { duration: 0.75, ease: EASE, delay: 0.12 },
+    };
+
+    return { imageRef, contentRef, imageAnim, contentAnim };
 }
 
-function AboutStory() {
-    return (
-        <section id="story" className="about-section relative overflow-hidden bg-background px-6 py-20 lg:px-10">
-            <img
-                src={leafDetail}
-                alt=""
-                aria-hidden="true"
-                className="absolute inset-0 h-full w-full object-cover opacity-35"
-                loading="lazy"
-            />
-            <div className="absolute inset-0 bg-background/80" />
-            <div className="absolute inset-0 bg-mint opacity-10" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(104,154,69,0.16),transparent_58%)]" />
-            <DotGrid className="opacity-15" />
-            <Particles count={14} />
+function AboutHero() {
+    const { imageRef, contentRef, imageAnim, contentAnim } = useAboutReveal();
 
-            <motion.div
-                className="relative z-10 mx-auto max-w-5xl text-center"
-                variants={slowStagger}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, amount: 0.35 }}
-            >
-                <motion.div variants={fadeUp} className="mx-auto inline-flex items-center justify-center rounded-full border border-primary/20 bg-background/70 px-8 py-5 shadow-soft backdrop-blur">
-                    <img src={companyLogo} alt="Okhai Pharma Intermediates Pvt. Ltd." className="h-20 w-auto object-contain md:h-24" />
-                </motion.div>
-                <motion.div variants={fadeUp} className="mt-8 text-xs uppercase tracking-[0.24em] text-primary">About the company</motion.div>
-                <motion.h2 variants={fadeUp} className="mx-auto mt-4 max-w-4xl text-4xl font-display leading-tight text-foreground md:text-5xl">
-                    A strong Indian manufacturer with a <span className="text-primary">global quality promise</span>.
-                </motion.h2>
-                <motion.div variants={fadeUp} className="mx-auto mt-7 h-px w-48 bg-primary/40" />
-                <div className="mx-auto mt-8 max-w-4xl space-y-5 text-lg leading-relaxed text-muted-foreground">
-                    <motion.p variants={fadeUp}>
-                        Okhai Pharma is recognized as an eminent manufacturer, exporter and supplier of pure nicotine and nicotine derivatives.
-                        Our formulations are developed under stringent quality controls and regulatory compliance so customers get consistent, reproducible results.
-                    </motion.p>
-                    <motion.p variants={fadeUp}>
-                        We serve pharmaceutical, research and agrochemical industries with products engineered for stability, traceability and safe handling.
-                        Our manufacturing practices prioritize eco-conscious processes and secure batch documentation.
-                    </motion.p>
+    return (
+        <section id="about-hero" className="about-section relative overflow-hidden bg-background px-6 py-20 lg:px-10">
+            <GridLines className="opacity-25" />
+            <Particles count={16} className="opacity-15" />
+            <div className="mx-auto max-w-7xl">
+                <div className="grid gap-12 lg:grid-cols-12 lg:items-center">
+                    <motion.div ref={contentRef} className="lg:col-span-6" {...contentAnim}>
+                        <div className="inline-flex items-center gap-3 rounded-full border border-primary/20 bg-background/80 px-5 py-3 text-sm uppercase tracking-[0.24em] text-primary shadow-soft backdrop-blur-sm">
+                            About Okhai Pharma
+                        </div>
+                        <motion.h1 variants={fadeUp} className="mt-6 text-4xl font-display leading-tight text-foreground md:text-5xl lg:text-6xl">
+                            A strong Indian manufacturer with a <span className="text-primary">global quality promise</span>.
+                        </motion.h1>
+                        <motion.p variants={fadeUp} className="mt-6 max-w-3xl text-lg leading-relaxed text-muted-foreground">
+                            Okhai Pharma is recognized as an eminent manufacturer, exporter and supplier of premium nicotine derivatives. We deliver strict quality, traceability, and reproducible batches for research, pharmaceutical and agrochemical customers.
+                        </motion.p>
+                        <motion.div variants={fadeUp} className="mt-8 grid gap-4 sm:grid-cols-2">
+                            <div className="rounded-3xl border border-primary/10 bg-white/90 p-6 shadow-soft">
+                                <div className="text-xs uppercase tracking-[0.2em] text-primary">Trusted globally</div>
+                                <div className="mt-3 text-xl font-semibold text-foreground">Trusted quality</div>
+                            </div>
+                            <div className="rounded-3xl border border-primary/10 bg-white/90 p-6 shadow-soft">
+                                <div className="text-xs uppercase tracking-[0.2em] text-primary">Safety standard</div>
+                                <div className="mt-3 text-xl font-semibold text-foreground">Responsible manufacture</div>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+
+                    <motion.div ref={imageRef} className="lg:col-span-6 relative" {...imageAnim}>
+                        <div className="relative mx-auto max-w-md rounded-[3rem] border border-primary/10 bg-white/90 p-6 shadow-elevated backdrop-blur-xl">
+                            <div className="absolute -right-8 top-8 rounded-full border border-primary/20 bg-white p-4 shadow-soft">
+                                <div className="text-[10px] uppercase tracking-[0.24em] text-primary">Trusted</div>
+                                <div className="mt-1 text-sm font-semibold text-foreground">Globally</div>
+                            </div>
+                            <motion.div
+                                className="overflow-hidden rounded-[2.5rem] bg-slate-100"
+                                initial={{ y: 20, opacity: 0.8, scale: 0.98 }}
+                                whileInView={{ y: 0, opacity: 1, scale: 1 }}
+                                viewport={{ once: true, amount: 0.4 }}
+                                transition={{ duration: 0.9, ease: EASE }}
+                                whileHover={{ scale: 1.02 }}
+                            >
+                                <img src={aboutImg} alt="About Okhai Pharma" className="w-full h-full object-cover" loading="lazy" />
+                            </motion.div>
+                        </div>
+                    </motion.div>
                 </div>
-            </motion.div>
+            </div>
         </section>
     );
 }
@@ -100,52 +120,40 @@ function AboutValues() {
             description: "Our product offers excellent value with a high concentration of active ingredients for long-lasting results.",
         },
     ];
+
     return (
         <section id="values" className="values-section relative py-20 px-6 lg:px-10 overflow-hidden bg-background">
             <MeshBlobs className="opacity-20" />
             <DotGrid className="opacity-20" />
             <div className="mx-auto max-w-7xl">
-                <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }} transition={{ duration: 0.7 }} className="max-w-3xl">
-                    <div className="text-xs uppercase tracking-[0.2em] text-primary">Why choose us</div>
-                    <h2 className="mt-4 text-4xl md:text-5xl font-display leading-tight text-foreground">
-                        What makes Okhai Pharma the trusted partner for <span className="text-primary">nicotine derivatives</span>.
-                    </h2>
-                </motion.div>
-                <div className="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-                    <div className="lg:col-span-7 text-muted-foreground">
-                        <p className="text-lg leading-relaxed">
-                            <strong>Okhai Pharma Intermediates Pvt. Ltd.</strong> is leading manufacturers of <strong>Pure Nicotine &amp; Nicotine derivatives</strong> from India.
+                <div className="grid gap-12 lg:grid-cols-12 lg:items-start">
+                    <motion.div className="lg:col-span-7" initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
+                        <div className="text-xs uppercase tracking-[0.2em] text-primary">Why choose us</div>
+                        <h2 className="mt-4 text-4xl font-display leading-tight text-foreground md:text-5xl">
+                            What makes Okhai Pharma the trusted partner for <span className="text-primary">nicotine derivatives</span>.
+                        </h2>
+                        <p className="mt-6 text-lg leading-relaxed text-muted-foreground text-justify">
+                            Okhai Pharma stands as a trusted name in the manufacturing and supply of Nicotine Sulphate 40%, delivering high quality, consistency, and reliability. With years of expertise in nicotine chemistry, we offer pharmaceutical-grade formulations developed under stringent quality controls and regulatory compliance. Our product is crafted using premium raw materials in advanced, advance facilities, ensuring high purity, solubility, and stability.
                         </p>
-                        <p className="mt-6 text-lg leading-relaxed">
-                            Okhai Pharma stands as a trusted name in the manufacturing and supply of Nicotine Sulphate 40%, delivering high quality, consistency, and reliability. With years of expertise in nicotine chemistry, we offer pharmaceutical-grade formulations developed under stringent quality controls and regulatory compliance. Our product is crafted using premium raw materials in advanced, state-of-the-art facilities ensuring high purity, solubility and stability.
+                        <p className="mt-6 text-lg leading-relaxed text-muted-foreground text-justify">
+                            What sets Okhai Pharma apart is our commitment to precision, safety, and innovation—key factors for pharmaceutical and research applications. Whether for drug development, toxicology studies, or scientific research, our Nicotine Sulphate 40% supports accurate and reproducible results. We also prioritize eco-conscious manufacturing practices, offering a biodegradable and safe formulation.
                         </p>
-                        <p className="mt-6 text-lg leading-relaxed">
-                            What sets Okhai Pharma apart is our commitment to <strong>precision, safety, and innovation</strong> — key factors for pharmaceutical and research applications. Whether for drug development, toxicology studies, or scientific research, our Nicotine Sulphate 40% supports accurate and reproducible results. We also prioritize eco-conscious manufacturing practices, offering a biodegradable and safe formulation.
-                        </p>
-                        <p className="mt-6 text-lg leading-relaxed">
+                        <p className="mt-6 text-lg leading-relaxed text-muted-foreground text-justify">
                             With responsive customer service, global export capabilities, and adherence to international standards, Okhai Pharma is the preferred partner for institutions and companies seeking dependable nicotine derivatives. Choose Okhai Pharma for quality you can trust, batch after batch.
                         </p>
-                    </div>
-                    <div className="lg:col-span-5">
-                        <motion.div
-                            className="space-y-4"
-                            variants={slowStagger}
-                            initial="hidden"
-                            whileInView="show"
-                            viewport={{ once: true, amount: 0.35 }}
-                        >
-                            {values.map((v) => (
-                                <motion.div key={v.title} variants={fadeUp} className="flex items-start gap-4">
-                                    <img src={leafIcon} alt="" aria-hidden="true" className="size-8 object-contain flex-shrink-0" />
-                                    <div>
-                                        <div className="font-semibold text-foreground">{v.title}:</div>
-                                        <div className="text-sm text-muted-foreground mt-1">{v.description}</div>
-                                    </div>
-                                </motion.div>
-                            ))}
-                        </motion.div>
-                    </div>
+                    </motion.div>
+
+                    <motion.div className="lg:col-span-5 space-y-4" variants={slowStagger} initial="hidden" whileInView="show" viewport={{ once: true, amount: 0.35 }}>
+                        {values.map((value) => (
+                            <motion.div key={value.title} variants={fadeUp} className="flex items-start gap-4 rounded-[2rem] border border-primary/10 bg-white/90 p-6 shadow-soft">
+                                <img src={leafIcon} alt="Leaf icon" className="h-10 w-10 shrink-0 object-contain" />
+                                <div>
+                                    <div className="text-sm uppercase tracking-[0.2em] text-primary">{value.title}</div>
+                                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{value.description}</p>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </motion.div>
                 </div>
             </div>
         </section>
@@ -158,9 +166,7 @@ export default function About() {
             <SiteNav />
             <main>
                 <AboutHero />
-                <AboutStory />
                 <AboutValues />
-                {/* <AboutTeam /> */}
             </main>
         </div>
     );

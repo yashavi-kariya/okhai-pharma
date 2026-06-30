@@ -37,64 +37,53 @@ function useLeadershipReveal() {
     return { headingRef, taglineRef, headingAnim, taglineAnim };
 }
 
-/* ─── useLeaderCardReveal ───────────────────────────────────────────── */
-function useLeaderCardReveal(index) {
-    const ref = useRef(null);
-    const inView = useInView(ref, { once: true });
-
-    const anim = {
-        initial: { opacity: 0, y: 40 },
-        animate: inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 },
-        transition: { duration: 0.7, delay: index * 0.1, ease: EASE },
-    };
-
-    return { ref, anim };
-}
+const leaderCardVariants = {
+    hidden: (index) => ({
+        opacity: 0,
+        y: 50,
+        x: index === 0 ? -70 : index === 2 ? 70 : 0,
+        scale: index === 1 ? 0.98 : 0.94,
+    }),
+    visible: (index) => ({
+        opacity: 1,
+        y: 0,
+        x: 0,
+        scale: 1,
+        transition: {
+            duration: 0.72,
+            delay: index === 1 ? 0 : 0.24,
+            ease: EASE,
+        },
+    }),
+};
 
 /* ─── LeaderCard ────────────────────────────────────────────────────── */
 function LeaderCard({ leader, index }) {
-    const { ref, anim } = useLeaderCardReveal(index);
-    const initial = leader.n.split(" ").slice(-1)[0][0];
-
     return (
         <motion.div
-            ref={ref}
-            className="leader-card group relative"
-            style={{ perspective: 1600, transformStyle: "preserve-3d" }}
-            {...anim}
-            whileHover={{ y: -10, scale: 1.025, rotateY: 6, rotateX: -3 }}
+            className="home-leader-card"
+            variants={leaderCardVariants}
+            custom={index}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.35 }}
+            whileHover={{ y: -10, scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
         >
-            <div className="absolute -inset-px rounded-[2rem] bg-gradient-to-br from-primary/60 via-primary/10 to-transparent opacity-60 group-hover:opacity-100 transition-opacity pointer-events-none" />
-            <div className="absolute inset-x-6 top-4 h-24 rounded-[2rem] bg-primary/10 blur-2xl opacity-80 pointer-events-none" />
-            <div className="absolute -right-8 top-12 h-24 w-24 rounded-full bg-primary/10 blur-3xl opacity-70 pointer-events-none" />
-            <div className="absolute -left-8 bottom-10 h-24 w-24 rounded-full bg-primary/10 blur-3xl opacity-70 pointer-events-none" />
-            <div className="relative rounded-[2rem] bg-card/90 border border-border/70 backdrop-blur-xl p-8 h-full flex flex-col overflow-hidden shadow-soft">
-                <div className="relative mx-auto">
-                    <motion.div
-                        className="relative rounded-full w-28 h-28 md:w-32 md:h-32 overflow-hidden border-2 border-primary/20 bg-background shadow-2xl shadow-primary/10"
-                        initial={{ scale: 0.92, rotate: -2 }}
-                        animate={{ scale: 1, rotate: 0 }}
-                        transition={{ duration: 0.55, ease: EASE }}
-                    >
-                        <img src={leader.img} alt={leader.n} className="w-full h-full object-cover" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent pointer-events-none" />
-                    </motion.div>
-                    <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-[0.2em] text-primary bg-background border border-primary/30 rounded-full px-3 py-1 whitespace-nowrap">
-                        {leader.yr}
-                    </span>
+            <div className="home-leader-card-media">
+                <div className="home-leader-card-avatar">
+                    <img src={leader.img} alt={leader.n} />
                 </div>
-                <div className="mt-8 text-center">
-                    <h3 className="font-display text-xl md:text-2xl">{leader.n}</h3>
-                    <div className="mt-1 text-sm italic text-primary">{leader.r}</div>
+                <div className="home-leader-card-badge">{leader.yr}</div>
+            </div>
+            <div className="home-leader-card-body">
+                <div>
+                    <h3>{leader.n}</h3>
+                    <p className="home-leader-card-role">{leader.r}</p>
+                    <span className="home-leader-card-underline" />
                 </div>
-                <div className="mt-4 flex items-center gap-2 justify-center text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
-                    <span className="size-1 rounded-full bg-primary animate-pulse" />
-                    {leader.focus}
-                </div>
-                <div className="mt-4 rounded-3xl border border-primary/15 bg-white/10 p-5 text-sm text-muted-foreground leading-relaxed text-center shadow-soft">
-                    {leader.b}
-                </div>
+                <p className="home-leader-card-description">{leader.b}</p>
+                <div className="home-leader-card-focus">{leader.focus}</div>
             </div>
         </motion.div>
     );
@@ -121,10 +110,6 @@ export default function Leadership() {
                             the <em className="italic text-primary">molecule</em>.
                         </h2>
                     </motion.div>
-                    <motion.p ref={taglineRef} className="md:col-span-5 text-muted-foreground text-base leading-relaxed border-l-2 border-primary/40 pl-5" {...taglineAnim}>
-                        A small, senior team — chemists, operators and global citizens —
-                        united by one obsession: purer molecules, made responsibly.
-                    </motion.p>
                 </div>
 
                 <div className="leaders-grid mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
