@@ -38,20 +38,21 @@ function useLeadershipReveal() {
 }
 
 const leaderCardVariants = {
+    // Start with center card visible and side cards tucked behind it (overlapping)
     hidden: (index) => ({
-        opacity: 0,
-        y: 50,
-        x: index === 0 ? -70 : index === 2 ? 70 : 0,
-        scale: index === 1 ? 0.98 : 0.94,
+        opacity: index === 1 ? 1 : 0,
+        x: 0,
+        y: index === 1 ? 0 : 8,
+        scale: index === 1 ? 1 : 0.96,
     }),
     visible: (index) => ({
         opacity: 1,
+        x: index === 0 ? -60 : index === 2 ? 60 : 0,
         y: 0,
-        x: 0,
         scale: 1,
         transition: {
             duration: 0.72,
-            delay: index === 1 ? 0 : 0.24,
+            delay: index === 1 ? 0 : 0.20,
             ease: EASE,
         },
     }),
@@ -121,4 +122,3 @@ export default function Leadership() {
         </section>
     );
 }
-

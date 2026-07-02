@@ -1,3 +1,17 @@
+# Frontend
 node_modules/
 dist/
+
+# Backend
+Admin/node_modules/
+Admin/.env
+
+# Root environment file 
 .env
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db

@@ -8,12 +8,14 @@ import product2 from "@/assets/products/product2.png";
 const PRODUCTS = [
     {
         id: "sulfate40",
+        slug: "nicotine-sulfate-40",
         name: "Nicotine Sulphate 40%",
         tagline: "Pharmaceutical Grade",
         image: product1,
     },
     {
         id: "alkaloid",
+        slug: "nicotine-alkaloid-90-95",
         name: "Nicotine Alkaloid 90% / 95%",
         tagline: "Premium Extract",
         image: product2,
@@ -71,7 +73,8 @@ export default function Nav() {
         setProductsOpen(false);
         setMenuOpen(false);
         setMobileProductsOpen(false);
-        navigate(`/products?product=${productId}`);
+        const product = PRODUCTS.find((p) => p.id === productId);
+        navigate(product ? `/products?product=${product.id}` : "/products");
     };
 
     const links = ["Home", "About Us", "Leadership", "Products", "Brochure", "Contact Us"];
@@ -132,7 +135,7 @@ export default function Nav() {
                                                 exit={{ opacity: 0, y: 12, scale: 0.97 }}
                                                 transition={{ duration: 0.22, ease: "easeOut" }}
                                                 /* Light green bg matching site theme */
-                                                className="absolute top-full left-1/2 -translate-x-1/2 mt-5 w-[30rem] rounded-2xl border border-emerald-200/80 shadow-2xl overflow-hidden"
+                                                className="absolute top-full left-1/2 -translate-x-1/2 mt-5 min-w-[22rem] w-[min(30rem,calc(100vw-2rem))] rounded-2xl border border-emerald-200/80 shadow-2xl overflow-hidden"
                                                 style={{ background: "linear-gradient(160deg,#edfaf3 0%,#f0fdf4 60%,#e8f5ee 100%)" }}
                                             >
                                                 {/* Thin green accent line at top */}

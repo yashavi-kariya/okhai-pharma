@@ -1,11 +1,11 @@
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSearchParams } from "react-router-dom";
 import { FloatingLeaves, MeshBlobs, Particles } from "./animated-bg";
 import SiteNav from "./SiteHeader";
 import "../responsive.css";
-import product1 from "@/assets/products/productpage2.png";
-import product2 from "@/assets/products/productpage1.png";
+import product1 from "@/assets/products/productpage1.png";
+import product2 from "@/assets/products/productpage2.png";
 
 // Leaf card wrapper with animated organic shape
 const LeafCard = ({ children, className, animated = true, delay = 0 }) => {
@@ -78,32 +78,18 @@ const LeafCard = ({ children, className, animated = true, delay = 0 }) => {
 
 export default function ProductsPage() {
     const [searchParams] = useSearchParams();
-    const [open, setOpen] = useState(false);
     const [selected, setSelected] = useState(
         searchParams.get("product") || "sulfate40"
     );
-    const detailRef = useRef(null);
+    const topRef = useRef(null);
 
-    // When the URL search param changes (e.g. navigating from the navbar dropdown),
-    // update the selected product and scroll to its details section.
     useEffect(() => {
         const productParam = searchParams.get("product");
         if (productParam && (productParam === "sulfate40" || productParam === "alkaloid")) {
             setSelected(productParam);
-            // Small delay so the component has time to update before scrolling
-            const timer = setTimeout(() => {
-                detailRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-            }, 120);
-            return () => clearTimeout(timer);
+            topRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
         }
     }, [searchParams]);
-
-    const handleProductSelect = (product) => {
-        setSelected(product);
-        requestAnimationFrame(() => {
-            detailRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-        });
-    };
 
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -127,6 +113,7 @@ export default function ProductsPage() {
 
     return (
         <div className="min-h-screen bg-[radial-gradient(circle_at_top,rgba(91,184,154,0.16),transparent_30%),linear-gradient(180deg,#f8fbf7_0%,#eff9f3_100%)] text-foreground overflow-hidden">
+            <div ref={topRef} />
             <SiteNav />
             <motion.main
                 initial={{ opacity: 0, y: 40 }}
@@ -202,15 +189,6 @@ export default function ProductsPage() {
                                             <p className="mt-3 text-sm text-muted-foreground leading-6">Clear guidance for storage, compliance, and secure supply chain workflows.</p>
                                         </div>
                                     </motion.div>
-
-                                    <motion.div
-                                        variants={itemVariants}
-                                        className="pt-1"
-                                    >
-                                        <button className="inline-flex items-center justify-center rounded-full bg-emerald-700 px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-700/15 transition duration-300 hover:-translate-y-0.5 hover:bg-emerald-800">
-                                            Explore product insights
-                                        </button>
-                                    </motion.div>
                                 </motion.div>
 
                                 <motion.div variants={itemVariants} className="relative z-10">
@@ -228,7 +206,7 @@ export default function ProductsPage() {
                                             <img
                                                 src={selected === "sulfate40" ? product1 : product2}
                                                 alt={selected === "sulfate40" ? "Nicotine Sulphate 40%" : "Nicotine Alkaloid 90% / 95%"}
-                                                className="h-[450px] w-full object-cover"
+                                                className="product-hero-image w-full h-auto object-cover"
                                             />
                                         </div>
                                         <div className="mt-6 space-y-3">
@@ -243,7 +221,7 @@ export default function ProductsPage() {
                     </div>
                 </section>
 
-                <section ref={detailRef} className="scroll-mt-24 mx-auto max-w-7xl px-6 lg:px-10 pt-10">
+                <section className="scroll-mt-24 mx-auto max-w-7xl px-6 lg:px-10 pt-10">
                     <AnimatePresence mode="wait">
                         <motion.article
                             key={selected}
@@ -274,7 +252,7 @@ export default function ProductsPage() {
                                                 animate={{ opacity: 1, y: 0, scale: 1 }}
                                                 exit={{ opacity: 0, y: -16, scale: 0.98 }}
                                                 transition={{ duration: 0.45, ease: "easeOut" }}
-                                                className="w-full rounded-[1.75rem] object-cover"
+                                                className="product-detail-image w-full rounded-[1.75rem] object-cover"
                                             />
                                         </AnimatePresence>
                                     </div>

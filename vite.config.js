@@ -10,5 +10,14 @@ export default defineConfig({
       "@": path.resolve(process.cwd(), "src"),
     },
   },
-  server: { port: 5173, host: true },
+  server: {
+    port: 5173,
+    host: true,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+      },
+    },
+  },
 });

@@ -2,8 +2,8 @@ import { useRef, useCallback, useEffect, useState } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { MeshBlobs, DotGrid, FloatingLeaves, SweepBeam } from "../components/animated-bg";
 import heroBg from "@/assets/hero-bg.jpg";
-import product1 from "@/assets/products/product1.png";
-import product2 from "@/assets/products/product2.png";
+import product1 from "@/assets/products/productpage1.png";
+import product2 from "@/assets/products/productpage2.png";
 import "../responsive.css";
 import { Link } from "react-router-dom";
 

@@ -1,407 +1,3 @@
-// import { motion, AnimatePresence } from "framer-motion";
-// import { useRef, useState } from "react";
-// import SiteNav from "./SiteHeader";
-// import { MeshBlobs, DotGrid, GridLines, FloatingLeaves } from "./animated-bg";
-// import "../responsive.css";
-
-// // ── Reusable animation variants ──────────────────────────────────────────────
-// const fadeUp = (delay = 0) => ({
-//     initial: { opacity: 0, y: 32 },
-//     whileInView: { opacity: 1, y: 0 },
-//     viewport: { once: true },
-//     transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1], delay },
-// });
-
-// const scaleIn = (delay = 0) => ({
-//     initial: { opacity: 0, scale: 0.95 },
-//     whileInView: { opacity: 1, scale: 1 },
-//     viewport: { once: true },
-//     transition: { duration: 0.55, ease: "easeOut", delay },
-// });
-
-// // ── 3D Card Tilt Animation ──────────────────────────────────────────────────
-// const card3D = (delay = 0) => ({
-//     initial: { opacity: 0, y: 40, rotateX: 10 },
-//     whileInView: { opacity: 1, y: 0, rotateX: 0 },
-//     viewport: { once: true },
-//     transition: { duration: 0.8, ease: "easeOut", delay },
-// });
-
-// // ── Styles ───────────────────────────────────────────────────────────────────
-// const inputCls =
-//     "w-full rounded-xl border border-border bg-background/50 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/60 outline-none focus:border-primary focus:ring-2 focus:ring-primary-soft transition-all duration-200";
-
-// const cardCls =
-//     "rounded-[2rem] border border-border bg-card/85 backdrop-blur-md p-8 shadow-soft transition-all duration-300 hover:shadow-glow hover:border-primary/20 h-full flex flex-col justify-between";
-
-// // ── 3D Card Component ───────────────────────────────────────────────────────
-// function Card3D({ children, delay = 0 }) {
-//     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-//     const cardRef = useRef(null);
-
-//     const handleMouseMove = (e) => {
-//         if (!cardRef.current) return;
-//         const rect = cardRef.current.getBoundingClientRect();
-//         const x = (e.clientX - rect.left) / rect.width - 0.5;
-//         const y = (e.clientY - rect.top) / rect.height - 0.5;
-//         setMousePosition({ x: x * 8, y: y * 8 });
-//     };
-
-//     const handleMouseLeave = () => {
-//         setMousePosition({ x: 0, y: 0 });
-//     };
-
-//     return (
-//         <motion.div
-//             ref={cardRef}
-//             {...card3D(delay)}
-//             onMouseMove={handleMouseMove}
-//             onMouseLeave={handleMouseLeave}
-//             animate={{
-//                 rotateX: mousePosition.y,
-//                 rotateY: mousePosition.x,
-//             }}
-//             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-//             style={{ perspective: 1000 }}
-//             whileHover={{ scale: 1.01 }}
-//             className="h-full"
-//         >
-//             <div className={cardCls}>
-//                 {children}
-//             </div>
-//         </motion.div>
-//     );
-// }
-
-// // ── Page ─────────────────────────────────────────────────────────────────────
-// export default function Contact() {
-//     const [submitted, setSubmitted] = useState(false);
-
-//     function handleSubmit(e) {
-//         e.preventDefault();
-//         setSubmitted(true);
-//         setTimeout(() => setSubmitted(false), 4000);
-//     }
-//     return (
-//         <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,rgba(56,131,70,0.16),transparent_30%),linear-gradient(180deg,#eef7ed_0%,#f7fbf6_45%,#ebf5e6_100%)] text-foreground overflow-hidden relative">
-//             <SiteNav />
-
-//             {/* ── Background animations matching project theme ──────────────────────── */}
-//             <MeshBlobs className="opacity-40" />
-//             <DotGrid className="opacity-25" />
-//             <GridLines className="opacity-10" />
-//             <FloatingLeaves count={8} className="opacity-30" />
-
-//             <main className="pt-28 pb-16 px-4 sm:px-6 lg:px-10 space-y-12 relative z-10">
-
-//                 {/* ── Hero Section ───────────────────────────────────────────────────── */}
-//                 <motion.section
-//                     {...fadeUp(0)}
-//                     className="mx-auto max-w-5xl text-center relative z-10 mb-12"
-//                 >
-//                     <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary-soft px-4 py-1.5 text-xs uppercase tracking-[0.2em] text-primary font-semibold">
-//                         <span className="size-1.5 rounded-full bg-primary animate-pulse" />
-//                         Reach Us
-//                     </div>
-
-//                     <h1 className="mt-6 text-4xl md:text-5xl lg:text-6xl font-display font-semibold text-foreground tracking-tight">
-//                         Connect with <span className="text-primary">Okhai Pharma</span>
-//                     </h1>
-
-//                     <p className="mx-auto mt-4 max-w-2xl text-base leading-8 text-muted-foreground">
-//                         Complete the form below and an Okhai Pharma representative will respond shortly.
-//                     </p>
-//                 </motion.section>
-
-//                 {/* ── Main Layout Grid ─────────────────────────────────────────────── */}
-//                 <section className="mx-auto max-w-7xl grid gap-8 lg:grid-cols-12 relative z-10">
-
-//                     {/* ── Left Column: Contact details & Bento Info ─────────────────── */}
-//                     <div className="lg:col-span-5 space-y-6">
-//                         <div className="space-y-4">
-//                             {[
-//                                 { label: "Phone", value: "+91 79900 82565", icon: "📱" },
-//                                 { label: "Email", value: "info@okhaipharma.com", icon: "📧" },
-//                                 { label: "Office", value: "Sr No.538, Ashapuri-Changa Road\nVill-Kasor Ta-sojitra Dis-Anand Pin-388460", icon: "📍" },
-//                             ].map(({ label, value, icon }, i) => (
-//                                 <motion.div
-//                                     key={label}
-//                                     {...scaleIn(0.1 + i * 0.1)}
-//                                     whileHover={{ y: -4, scale: 1.01 }}
-//                                     className="rounded-2xl bg-card/75 border border-border p-6 shadow-soft transition-all duration-300 hover:border-primary/40 hover:shadow-glow group flex items-start gap-5"
-//                                 >
-//                                     <div className="flex-shrink-0 w-12 h-12 bg-primary-soft rounded-xl flex items-center justify-center text-2xl text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-300">
-//                                         {icon}
-//                                     </div>
-//                                     <div>
-//                                         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary/80">
-//                                             {label}
-//                                         </p>
-//                                         <p className="mt-1.5 text-base font-semibold text-foreground leading-snug">
-//                                             {value}
-//                                         </p>
-//                                     </div>
-//                                 </motion.div>
-//                             ))}
-//                         </div>
-
-//                         {/* ── Bento Grid: Hours & Department Details ───────────────── */}
-//                         <div className="grid gap-6 sm:grid-cols-2">
-//                             {/* Working Hours */}
-//                             {/* <motion.div
-//                                 {...fadeUp(0.35)}
-//                                 whileHover={{ y: -3 }}
-//                                 className="rounded-2xl border border-border/80 bg-primary-soft/40 p-6 shadow-sm flex flex-col justify-between"
-//                             >
-//                                 <div>
-//                                     <p className="text-sm font-bold text-primary flex items-center gap-1.5">
-//                                         ⏰ Working hours
-//                                     </p>
-//                                     <div className="mt-4 space-y-2 text-xs text-foreground/80 leading-relaxed font-medium">
-//                                         <p>Monday – Friday: <br /><span className="text-foreground font-semibold">10:00 AM – 6:00 PM</span></p>
-//                                         <p>Saturday: <br /><span className="text-foreground font-semibold">10:00 AM – 3:00 PM</span></p>
-//                                         <p>Sunday: <br /><span className="text-destructive font-semibold">Closed</span></p>
-//                                     </div>
-//                                 </div>
-//                             </motion.div> */}
-
-//                             {/* Departments */}
-//                             {/* <div className="space-y-4">
-//                                 {[
-//                                     {
-//                                         title: "🏭 Plant",
-//                                         description:
-//                                             "Raw material extraction, purification and intermediate storage.",
-//                                     },
-//                                     {
-//                                         title: "🤝 Support",
-//                                         description:
-//                                             "Sales, compliance and customs documentation support.",
-//                                     },
-//                                 ].map(({ title, description }, i) => (
-//                                     <motion.div
-//                                         key={title}
-//                                         {...fadeUp(0.4 + i * 0.1)}
-//                                         whileHover={{ y: -3 }}
-//                                         className="rounded-2xl border border-border bg-card/60 p-5 shadow-sm transition-all duration-300"
-//                                     >
-//                                         <p className="text-sm font-bold text-foreground">
-//                                             {title}
-//                                         </p>
-//                                         <p className="mt-2 text-xs text-muted-foreground leading-relaxed">
-//                                             {description}
-//                                         </p>
-//                                     </motion.div>
-//                                 ))}
-//                             </div> */}
-//                         </div>
-//                     </div>
-
-//                     {/* ── Right Column: Enquiry Form inside 3D Card ──────────────────── */}
-//                     <div className="lg:col-span-7">
-//                         <Card3D delay={0.2}>
-//                             <div className="space-y-6">
-//                                 <div className="border-b border-border/80 pb-6">
-//                                     <p className="text-sm uppercase tracking-[0.2em] text-primary font-bold">
-//                                         Enquiry Form
-//                                     </p>
-//                                     <h2 className="mt-2 text-3xl font-display font-semibold text-foreground">
-//                                         Send your enquiry
-//                                     </h2>
-//                                     <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-//                                         Complete the form below and an Okhai Pharma representative will respond shortly.
-//                                     </p>
-//                                 </div>
-
-//                                 <form onSubmit={handleSubmit} className="space-y-5">
-//                                     {/* Name + Email */}
-//                                     <div className="grid gap-5 md:grid-cols-2">
-//                                         <div className="space-y-2">
-//                                             <span className="block text-xs font-bold uppercase tracking-[0.1em] text-muted-foreground">
-//                                                 Name
-//                                             </span>
-//                                             <input
-//                                                 type="text"
-//                                                 placeholder="Your name"
-//                                                 required
-//                                                 className={inputCls}
-//                                             />
-//                                         </div>
-//                                         <div className="space-y-2">
-//                                             <span className="block text-xs font-bold uppercase tracking-[0.1em] text-muted-foreground">
-//                                                 Email address
-//                                             </span>
-//                                             <input
-//                                                 type="email"
-//                                                 placeholder="you@example.com"
-//                                                 required
-//                                                 className={inputCls}
-//                                             />
-//                                         </div>
-//                                     </div>
-
-//                                     {/* Type + Address */}
-//                                     <div className="grid gap-5 md:grid-cols-2">
-//                                         {/* <div className="space-y-2"> */}
-//                                         {/* <span className="block text-xs font-bold uppercase tracking-[0.1em] text-muted-foreground">
-//                                                 Residential / Business
-//                                             </span> */}
-//                                         {/* <select
-//                                                 className={`${inputCls} bg-white appearance-none cursor-pointer pr-10`}
-//                                                 required
-//                                                 defaultValue=""
-//                                             >
-//                                                 <option value="" disabled>Select option</option>
-//                                                 <option value="Business">Business</option>
-//                                                 <option value="Residential">Residential</option>
-//                                             </select> */}
-//                                         {/* </div> */}
-//                                         <div className="space-y-2">
-//                                             <span className="block text-xs font-bold uppercase tracking-[0.1em] text-muted-foreground">
-//                                                 Address
-//                                             </span>
-//                                             <input
-//                                                 type="text"
-//                                                 placeholder="Your address"
-//                                                 className={inputCls}
-//                                             />
-//                                         </div>
-//                                     </div>
-
-//                                     {/* Message */}
-//                                     <div className="space-y-2">
-//                                         <span className="block text-xs font-bold uppercase tracking-[0.1em] text-muted-foreground">
-//                                             Message
-//                                         </span>
-//                                         <textarea
-//                                             rows={5}
-//                                             placeholder="Write your enquiry here…"
-//                                             required
-//                                             className={`${inputCls} resize-none`}
-//                                         />
-//                                     </div>
-
-//                                     {/* Consent */}
-//                                     <div className="flex items-start gap-3">
-//                                         <input
-//                                             type="checkbox"
-//                                             id="consent"
-//                                             required
-//                                             className="mt-1 h-4 w-4 rounded border-border text-primary focus:ring-primary-soft focus:ring-offset-background"
-//                                         />
-//                                         <label htmlFor="consent" className="text-xs text-muted-foreground leading-normal">
-//                                             I agree to Okhai Pharma's handling of my data according to the privacy policy.
-//                                         </label>
-//                                     </div>
-
-//                                     {/* Submit */}
-//                                     <div>
-//                                         <button
-//                                             type="submit"
-//                                             className="w-full inline-flex items-center justify-center gap-2.5 rounded-xl bg-primary text-primary-foreground px-8 py-4 text-sm font-bold shadow-soft hover:bg-primary/95 transition duration-200 active:scale-[0.99] cursor-pointer"
-//                                         >
-//                                             Send Message
-//                                             <motion.svg
-//                                                 xmlns="http://www.w3.org/2000/svg"
-//                                                 width="16"
-//                                                 height="16"
-//                                                 viewBox="0 0 24 24"
-//                                                 fill="none"
-//                                                 stroke="currentColor"
-//                                                 strokeWidth="2"
-//                                                 strokeLinecap="round"
-//                                                 strokeLinejoin="round"
-//                                                 animate={{ x: [0, 4, 0] }}
-//                                                 transition={{ duration: 1.8, repeat: Infinity }}
-//                                             >
-//                                                 <line x1="22" y1="2" x2="11" y2="13" />
-//                                                 <polygon points="22 2 15 22 11 13 2 9 22 2" />
-//                                             </motion.svg>
-//                                         </button>
-
-//                                         {/* Success banner */}
-//                                         <AnimatePresence>
-//                                             {submitted && (
-//                                                 <motion.div
-//                                                     initial={{ opacity: 0, y: 10, scale: 0.95 }}
-//                                                     animate={{ opacity: 1, y: 0, scale: 1 }}
-//                                                     exit={{ opacity: 0, y: -10, scale: 0.95 }}
-//                                                     transition={{ duration: 0.3 }}
-//                                                     className="mt-4 rounded-xl border border-primary/20 bg-primary-soft/50 p-4 text-center text-sm font-semibold text-primary"
-//                                                 >
-//                                                     ✅ Your message has been sent! We'll get back to you soon.
-//                                                 </motion.div>
-//                                             )}
-//                                         </AnimatePresence>
-//                                     </div>
-//                                 </form>
-//                             </div>
-//                         </Card3D>
-//                     </div>
-//                 </section>
-
-//                 {/* ── Map / Location Section ───────────────────────────────────────── */}
-//                 <motion.section
-//                     {...fadeUp(0.1)}
-//                     className="mx-auto max-w-7xl relative z-10"
-//                 >
-//                     <div className="rounded-[2rem] border border-border bg-card/85 p-8 shadow-soft transition-all duration-300 hover:border-primary/20">
-//                         {/* Header */}
-//                         <div className="space-y-2 mb-6">
-//                             <p className="text-sm uppercase tracking-[0.2em] text-primary font-bold">
-//                                 Location
-//                             </p>
-//                             <h2 className="text-2xl font-display font-semibold text-foreground">
-//                                 Find our office
-//                             </h2>
-//                         </div>
-
-//                         {/* Interactive Map */}
-//                         <motion.div
-//                             onClick={() => window.open("https://www.google.com/maps/search/?api=1&query=Kasor+Sojitra+Anand+Gujarat+388460", "_blank", "noopener,noreferrer")}
-//                             whileHover={{ scale: 1.005, boxShadow: "var(--shadow-glow)" }}
-//                             className="rounded-2xl overflow-hidden border border-border h-72 relative group cursor-pointer shadow-soft transition-all duration-300"
-//                             role="button"
-//                             tabIndex={0}
-//                             onKeyDown={(e) => e.key === "Enter" && window.open("https://www.google.com/maps/search/?api=1&query=Kasor+Sojitra+Anand+Gujarat+388460", "_blank", "noopener,noreferrer")}
-//                         >
-//                             <iframe
-//                                 title="Office Location"
-//                                 src="https://maps.google.com/maps?q=Kasor,Sojitra,Anand,Gujarat,388460&output=embed&z=13"
-//                                 className="w-full h-full border-0 pointer-events-none"
-//                                 loading="lazy"
-//                                 allowFullScreen
-//                             />
-
-//                             <motion.div
-//                                 initial={{ opacity: 0 }}
-//                                 whileHover={{ opacity: 1 }}
-//                                 transition={{ duration: 0.2 }}
-//                                 className="absolute inset-0 bg-background/80 flex items-center justify-center backdrop-blur-sm"
-//                             >
-//                                 <motion.span
-//                                     animate={{ y: [0, -3, 0] }}
-//                                     transition={{ duration: 1.5, repeat: Infinity }}
-//                                     className="bg-card text-foreground text-sm font-semibold px-6 py-3 rounded-xl shadow-soft border border-border"
-//                                 >
-//                                     📍 Open in Google Maps
-//                                 </motion.span>
-//                             </motion.div>
-//                         </motion.div>
-
-//                         {/* Address Footer */}
-//                         <p className="mt-4 text-sm text-muted-foreground text-center font-medium">
-//                             Sr No.538, Ashapuri-Changa Road
-//                             Vill-Kasor Ta-sojitra Dis-Anand Pin-388460
-//                         </p>
-//                     </div>
-//                 </motion.section>
-
-//             </main>
-//         </div>
-//     );
-// }
-
 import { motion, AnimatePresence } from "framer-motion";
 import { useRef, useState } from "react";
 import SiteNav from "./SiteHeader";
@@ -513,11 +109,35 @@ function FaqItem({ item, index, openIndex, setOpenIndex }) {
 export default function Contact() {
     const [submitted, setSubmitted] = useState(false);
     const [faqOpen, setFaqOpen] = useState(null);
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        subject: '',
+        message: '',
+    });
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
-        setSubmitted(true);
-        setTimeout(() => setSubmitted(false), 4000);
+        setIsSubmitting(true);
+
+        try {
+            await fetch('/api/admin/inquiries', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    ...formData,
+                    sourcePage: 'contact',
+                }),
+            });
+            setSubmitted(true);
+            setFormData({ name: '', email: '', subject: '', message: '' });
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsSubmitting(false);
+            setTimeout(() => setSubmitted(false), 4000);
+        }
     }
 
     return (
@@ -572,39 +192,25 @@ export default function Contact() {
                             <div className="grid gap-5 md:grid-cols-2">
                                 <div>
                                     <label className={labelCls}>Full Name <span className="text-red-400">*</span></label>
-                                    <input type="text" placeholder="John Doe" required className={inputCls} />
+                                    <input type="text" placeholder="John Doe" required value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className={inputCls} />
                                 </div>
                                 <div>
                                     <label className={labelCls}>Email Address <span className="text-red-400">*</span></label>
-                                    <input type="email" placeholder="you@example.com" required className={inputCls} />
+                                    <input type="email" placeholder="you@example.com" required value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className={inputCls} />
                                 </div>
                             </div>
 
                             {/* Row 2: Phone + Company */}
-                            <div className="grid gap-5 md:grid-cols-2">
-                                <div>
-                                    <label className={labelCls}>Phone Number</label>
-                                    <input type="tel" placeholder="+91 98765 43210" className={inputCls} />
-                                </div>
-                                {/* <div>
-                                    <label className={labelCls}>Company Name</label>
-                                    <input type="text" placeholder="Your Company" className={inputCls} />
-                                </div> */}
-                            </div>
+                            {/* Removed - no longer needed */}
 
-                            {/* Row 3: Address */}
-                            <div>
-                                <label className={labelCls}>Address</label>
-                                <input type="text" placeholder="Your address" className={inputCls} />
-                            </div>
-
-                            {/* Row 4: Subject */}
+                            {/* Row 3: Subject */}
                             <div>
                                 <label className={labelCls}>Subject <span className="text-red-400">*</span></label>
                                 <div className="relative">
                                     <select
                                         required
-                                        defaultValue=""
+                                        value={formData.subject}
+                                        onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
                                         className={`${inputCls} appearance-none cursor-pointer pr-10 bg-background/60`}
                                     >
                                         <option value="" disabled>Select a subject</option>
@@ -630,6 +236,8 @@ export default function Contact() {
                                     rows={5}
                                     placeholder="How can we help you?"
                                     required
+                                    value={formData.message}
+                                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                                     className={`${inputCls} resize-none`}
                                 />
                             </div>
@@ -652,7 +260,7 @@ export default function Contact() {
                                 type="submit"
                                 className="w-full inline-flex items-center justify-center gap-2.5 rounded-xl bg-primary text-primary-foreground px-8 py-4 text-sm font-bold shadow-soft hover:bg-primary/90 transition duration-200 active:scale-[0.99] cursor-pointer"
                             >
-                                Send Message
+                                {isSubmitting ? 'Sending...' : 'Send Message'}
                                 <motion.svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     width="16" height="16"
@@ -790,16 +398,16 @@ export default function Contact() {
                         </div>
 
                         <motion.div
-                            onClick={() => window.open("https://www.google.com/maps/search/?api=1&query=Kasor+Sojitra+Anand+Gujarat+388460", "_blank", "noopener,noreferrer")}
+                            onClick={() => window.open("https://www.google.com/maps/place/Okhai+Pharma+Intermediates+Pvt+Ltd/@22.5653178,72.7863326,804m/data=!3m2!1e3!4b1!4m6!3m5!1s0x395e5700556aa1b1:0xb31c0bffa3a47fab!8m2!3d22.5653178!4d72.7863326!16s%2Fg%2F11xckx_vv1?entry=ttu&g_ep=EgoyMDI2MDYyOC4wIKXMDSoASAFQAw%3D%3D", "_blank", "noopener,noreferrer")}
                             whileHover={{ scale: 1.005 }}
                             className="rounded-2xl overflow-hidden border border-border h-72 relative group cursor-pointer shadow-soft transition-all duration-300"
                             role="button"
                             tabIndex={0}
-                            onKeyDown={(e) => e.key === "Enter" && window.open("https://www.google.com/maps/search/?api=1&query=Kasor+Sojitra+Anand+Gujarat+388460", "_blank", "noopener,noreferrer")}
+                            onKeyDown={(e) => e.key === "Enter" && window.open("https://www.google.com/maps/place/Okhai+Pharma+Intermediates+Pvt+Ltd/@22.5653178,72.7863326,804m/data=!3m2!1e3!4b1!4m6!3m5!1s0x395e5700556aa1b1:0xb31c0bffa3a47fab!8m2!3d22.5653178!4d72.7863326!16s%2Fg%2F11xckx_vv1?entry=ttu&g_ep=EgoyMDI2MDYyOC4wIKXMDSoASAFQAw%3D%3D", "_blank", "noopener,noreferrer")}
                         >
                             <iframe
                                 title="Office Location"
-                                src="https://maps.google.com/maps?q=Kasor,Sojitra,Anand,Gujarat,388460&output=embed&z=13"
+                                src="https://maps.google.com/maps?q=22.5653178,72.7863326&z=17&output=embed"
                                 className="w-full h-full border-0 pointer-events-none"
                                 loading="lazy"
                                 allowFullScreen
