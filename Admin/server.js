@@ -13,7 +13,12 @@ import adminRoutes from './routes/adminRoutes.js';
 const envPath = fileURLToPath(new URL('./.env', import.meta.url));
 dotenv.config({ path: envPath });
 const app = express();
-app.use(cors({ origin: true, credentials: true }));
+app.use(
+    cors({
+        origin: process.env.FRONTEND_URL,
+        credentials: true,
+    })
+);
 app.use(express.json());
 
 const PORT = process.env.PORT || 5000;

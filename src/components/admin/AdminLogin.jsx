@@ -30,7 +30,7 @@ export default function AdminLogin() {
 
             // payload logging removed
 
-            const response = await fetch('/api/admin/login', {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: payloadEmail, password: payloadPassword }),
@@ -40,7 +40,6 @@ export default function AdminLogin() {
             if (!response.ok) {
                 throw new Error(data.message || 'Login failed');
             }
-
             localStorage.setItem('okhai_admin_token', data.token);
             navigate('/admin/dashboard', { replace: true });
         } catch (err) {
