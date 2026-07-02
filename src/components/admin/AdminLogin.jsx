@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { apiCall } from '@/utils/api';
 
 export default function AdminLogin() {
     const navigate = useNavigate();
@@ -30,16 +31,10 @@ export default function AdminLogin() {
 
             // payload logging removed
 
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/login`, {
+            const data = await apiCall('/api/admin/login', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: payloadEmail, password: payloadPassword }),
             });
-
-            const data = await response.json();
-            if (!response.ok) {
-                throw new Error(data.message || 'Login failed');
-            }
             localStorage.setItem('okhai_admin_token', data.token);
             navigate('/admin/dashboard', { replace: true });
         } catch (err) {

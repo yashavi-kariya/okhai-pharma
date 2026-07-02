@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { apiCall } from '@/utils/api';
 
 const AVAILABLE_PRODUCTS = [
     'Nicotine Sulphate 40%',
@@ -24,15 +25,9 @@ export default function AdminDashboard() {
 
         async function loadAdmin() {
             try {
-                const response = await fetch('/api/admin/me', {
+                const data = await apiCall('/api/admin/me', {
                     headers: { Authorization: `Bearer ${token}` },
                 });
-
-                if (!response.ok) {
-                    throw new Error('Unauthorized');
-                }
-
-                const data = await response.json();
                 setAdmin(data.admin);
             } catch (error) {
                 localStorage.removeItem('okhai_admin_token');
@@ -54,8 +49,7 @@ export default function AdminDashboard() {
                 if (searchQuery) params.set('q', searchQuery);
 
                 const query = params.toString() ? `?${params.toString()}` : '';
-                const response = await fetch(`/api/admin/inquiries${query}`);
-                const data = await response.json();
+                const data = await apiCall(`/api/admin/inquiries${query}`);
                 setInquiries(data.inquiries || []);
             } catch (error) {
                 console.error(error);
@@ -67,7 +61,7 @@ export default function AdminDashboard() {
 
     async function handleLogout() {
         localStorage.removeItem('okhai_admin_token');
-        await fetch('/api/admin/logout', { method: 'POST' });
+        await apiCall('/api/admin/logout', { method: 'POST' });
         navigate('/admin/log-in', { replace: true });
     }
 
@@ -91,8 +85,7 @@ export default function AdminDashboard() {
             if (productFilter && productFilter !== 'all') params.set('productName', productFilter);
             if (searchQuery) params.set('q', searchQuery);
             const query = params.toString() ? `?${params.toString()}` : '';
-            const response = await fetch(`/api/admin/inquiries${query}`);
-            const data = await response.json();
+            const data = await apiCall(`/api/admin/inquiries${query}`);
             setInquiries(data.inquiries || []);
         } catch (err) {
             console.error(err);
@@ -105,8 +98,7 @@ export default function AdminDashboard() {
         if (!id) return;
         if (!confirm('Delete this inquiry? This action cannot be undone.')) return;
         try {
-            const resp = await fetch(`/api/admin/inquiries/${id}`, { method: 'DELETE' });
-            if (!resp.ok) throw new Error('Delete failed');
+            await apiCall(`/api/admin/inquiries/${id}`, { method: 'DELETE' });
             setInquiries((prev) => prev.filter((i) => i._id !== id));
         } catch (err) {
             console.error(err);

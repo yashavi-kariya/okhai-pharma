@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useRef, useState } from "react";
+import { apiCall } from "@/utils/api";
 import SiteNav from "./SiteHeader";
 import { MeshBlobs, DotGrid, GridLines, FloatingLeaves } from "./animated-bg";
 import "../responsive.css";
@@ -122,7 +123,7 @@ export default function Contact() {
         setIsSubmitting(true);
 
         try {
-            await fetch('/api/admin/inquiries', {
+            await apiCall('/api/admin/inquiries', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

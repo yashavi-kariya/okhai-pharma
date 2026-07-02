@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { apiCall } from "@/utils/api";
 import { DotGrid, FloatingLeaves } from "./animated-bg";
 
 export function ContactSection() {
@@ -28,7 +29,7 @@ export function ContactSection() {
     setIsSubmitting(true);
 
     try {
-      await fetch('/api/admin/inquiries', {
+      await apiCall('/api/admin/inquiries', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
