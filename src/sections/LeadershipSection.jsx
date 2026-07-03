@@ -75,7 +75,6 @@ function LeaderCard({ leader, index }) {
                 <div className="home-leader-card-avatar">
                     <img src={leader.img} alt={leader.n} />
                 </div>
-                <div className="home-leader-card-badge">{leader.yr}</div>
             </div>
             <div className="home-leader-card-body">
                 <div>
@@ -113,7 +112,7 @@ export default function Leadership() {
                     </motion.div>
                 </div>
 
-                <div className="leaders-grid mt-16 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="leaders-grid mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {leaders.map((leader, i) => (
                         <LeaderCard key={leader.n} leader={leader} index={i} />
                     ))}

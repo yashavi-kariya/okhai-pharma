@@ -30,8 +30,7 @@ function useTransparentImage(src, tolerance = 30) {
 
             const { width: w, height: h } = canvas;
             const imageData = ctx.getImageData(0, 0, w, h);
-            const data = imageData.data; // [r,g,b,a, r,g,b,a, ...]
-
+            const data = imageData.data;
             const visited = new Uint8Array(w * h);
 
             const isWhitish = (idx) => {
@@ -90,8 +89,8 @@ function TransparentImg({ src, alt, className, ...props }) {
 }
 
 const heroProducts = [
-    { src: product1, title: "Pure Nicotine USP", subtitle: "High-purity liquid nicotine" },
-    { src: product2, title: "Nicotine Polacrilex", subtitle: "Designed for formulations" },
+    { src: product1, title: "Nicotine Sulphate 40%", productKey: "sulfate40" },
+    { src: product2, title: "Nicotine alkaloid 90% / 95%", productKey: "alkaloid" },
 ];
 
 /* ─── useHeroSlider ─────────────────────────────────────────────────── */
@@ -170,14 +169,45 @@ export default function Hero() {
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -20 }}
                                 transition={{ duration: 0.8, ease: EASE }}
-                                className="absolute inset-6 rounded-[2rem] overflow-hidden border border-white/10 bg-background/10 shadow-soft flex flex-col items-center justify-center p-4">
-                                <TransparentImg
-                                    src={heroProducts[activeIndex].src}
-                                    alt={heroProducts[activeIndex].title}
-                                    className="max-h-full w-full object-contain"
-                                    loading="lazy"
-                                    decoding="async"
-                                />
+                                className="absolute inset-6 rounded-[2rem] overflow-hidden border border-white/10 bg-background/10 shadow-soft flex flex-col items-center justify-between p-4">
+
+                                <Link
+                                    to={`/products?product=${heroProducts[activeIndex].productKey}`}
+                                    className="relative flex-1 flex items-center justify-center w-full cursor-pointer group/img"
+                                >
+                                    <TransparentImg
+                                        src={heroProducts[activeIndex].src}
+                                        alt={heroProducts[activeIndex].title}
+                                        className="max-h-[calc(100%-4rem)] w-full object-contain transition-transform duration-300 group-hover/img:scale-105"
+                                        loading="lazy"
+                                        decoding="async"
+                                    />
+                                </Link>
+
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.25, duration: 0.5, ease: EASE }}
+                                    className="w-full text-center">
+                                    <Link to={`/products?product=${heroProducts[activeIndex].productKey}`}>
+                                        <p className="inline-block rounded-full bg-primary-soft border border-primary/20 px-4 py-1 text-sm font-semibold uppercase tracking-[0.18em] text-primary hover:bg-primary/20 transition-colors cursor-pointer">
+                                            {heroProducts[activeIndex].title}
+                                        </p>
+                                    </Link>
+                                    <p className="mt-2 text-sm text-foreground/80">
+                                        {heroProducts[activeIndex].subtitle}
+                                    </p>
+
+                                    <div className="mt-4 flex items-center justify-center gap-1.5">
+                                        {heroProducts.map((_, i) => (
+                                            <span
+                                                key={i}
+                                                className={`h-1.5 rounded-full transition-all duration-300 ${i === activeIndex ? "w-5 bg-primary" : "w-1.5 bg-foreground/20"
+                                                    }`}
+                                            />
+                                        ))}
+                                    </div>
+                                </motion.div>
                             </motion.div>
                         </AnimatePresence>
                     </div>

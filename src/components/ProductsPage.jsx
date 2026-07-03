@@ -257,13 +257,13 @@ export default function ProductsPage() {
                                         </AnimatePresence>
                                     </div>
 
-                                    <div className="space-y-6">
-                                        <h2 className="text-4xl md:text-5xl font-display text-primary">
+                                    <div className="space-y-6 flex flex-col justify-center h-full">
+                                        <h2 className="text-4xl md:text-3xl font-display text-primary">
                                             {selected === "sulfate40" ? "Nicotine Sulphate 40%" : "Nicotine alkaloid 90% / 95%"}
                                         </h2>
-                                        <p className="text-muted-foreground leading-8 text-lg">
+                                        <p className="text-muted-foreground leading-8 text-lg text-justify">
                                             {selected === "sulfate40"
-                                                ? "Nicotine Sulphate 40% is a high-purity, water-soluble nicotine ingredient (40% active) widely used in pharmaceutical formulations, nicotine refinement and scientific research. Manufactured under strict quality controls for consistent, reproducible results."
+                                                ? "Nicotine Sulphate 40% is a high-purity, water-soluble compound widely used in the pharmaceutical and scientific research fields. Containing 40% active nicotine, it plays a vital role in the development of nicotine-based therapies, including smoking cessation aids and transdermal patches. In research, it is used to study nicotine’s pharmacological effects, receptor interactions, and behavioral impacts. Its consistent composition and solubility ensure reliable results in toxicology and neuroscience studies. Manufactured under strict quality standards, Nicotine Sulphate 40% offers stability, safety, and reproducibility, making it a preferred choice for laboratories, academic institutions, and pharmaceutical companies engaged in advanced nicotine research and formulation."
                                                 : "Okhaipharma specializes in supplying premium Nicotine Alkaloids, the most abundant and potent alkaloid extracted from the Nicotiana tabacum plant. We offer two highly concentrated grades: 90% and 95%, serving as the essential building blocks for sophisticated nicotine-based products globally."
                                             }
                                         </p>
@@ -282,13 +282,14 @@ export default function ProductsPage() {
                                             </ul>
                                         </div>
                                         <div className="space-y-6">
-                                            <h3 className="text-3xl font-semibold text-primary">Key Features</h3>
+                                            <h4 className="text-3xl font-semibold text-primary">Key Features of Nicotine Sulphate 40% by Okhai Pharma:</h4>
                                             <ul className="list-disc pl-5 space-y-3 text-muted-foreground">
-                                                <li><strong>Trusted Sourcing:</strong> Raw tobacco procured from certified Indian producers for quality and traceability.</li>
-                                                <li><strong>Strict Quality Control:</strong> Each batch undergoes testing to meet defined specifications.</li>
-                                                <li><strong>Versatile Applications:</strong> Suitable for R&D, formulation and manufacturing workflows.</li>
-                                                <li><strong>Handling Support:</strong> Guidance available for safe use and application.</li>
-                                                <li><strong>Customer Service:</strong> Ongoing support for purchasing, storage and regulatory queries.</li>
+                                                <p>Okhai Pharma is a trusted global supplier of premium-quality Nicotine Sulphate 40%, known for its purity, consistency, and reliability. We are committed to delivering excellence through rigorous quality assurance and dedicated customer support. Here’s what sets our product apart:</p>
+                                                <li><strong>Trusted Sourcing:</strong> We procure raw tobacco exclusively from certified producers in India, ensuring our nicotine sulphate is free from impurities and harmful contaminants.</li>
+                                                <li><strong>Strict Quality Control:</strong> Every batch undergoes advanced manufacturing and testing under stringent quality protocols, meeting the highest industry standards.</li>
+                                                <li><strong>Versatile Applications:</strong> Okhai Pharma’s Nicotine Sulphate 40% serves as a key input in the production of various nicotine-based products and intermediates.</li>
+                                                <li><strong>Expert Handling Support:</strong>Our team provides detailed guidance on the safe handling, usage, and application of the product.</li>
+                                                <li><strong>Dedicated Customer Service:</strong>We offer continuous support to assist with purchasing, usage, and storage—ensuring safety and efficiency every step of the way.</li>
                                             </ul>
                                         </div>
                                     </div>
@@ -306,7 +307,7 @@ export default function ProductsPage() {
                                             <div className="space-y-5 text-muted-foreground leading-8">
                                                 <p>Every single batch of our Nicotine Alkaloids undergoes a comprehensive Quality Testing System. We utilize state-of-the-art analytical equipment, including HPLC and GC Chromatographs, to meticulously examine and verify purity, ensuring reliable potency and quality that surpass industry benchmarks.</p>
                                                 <div className="rounded-[2rem] border border-border/70 bg-background/70 p-6">
-                                                    <h4 className="font-semibold mb-4">This high-purity compound is critical for:</h4>
+                                                    <h4 className="text-2xl font-semibold text-primary">This high-purity compound is critical for:</h4>
                                                     <ul className="list-disc pl-5 space-y-3 text-muted-foreground">
                                                         <li><strong>Nicotine Replacement Therapy (NRT):</strong> The base ingredient for transdermal patches, gums, and lozenges.</li>
                                                         <li><strong>E-Liquid Manufacturing:</strong> Ensuring product safety and consistent nicotine concentration in vaping products.</li>
@@ -329,25 +330,25 @@ export default function ProductsPage() {
                                         <LeafCard className="bg-linear-to-br from-lime-50 via-emerald-100 to-teal-100 p-8 text-foreground rounded-[2.5rem] shadow-soft border border-emerald-200" delay={0}>
                                             <h4 className="font-semibold mb-4 text-lg text-foreground">Storage Conditions</h4>
                                             <ul className="list-disc pl-5 space-y-3 text-sm leading-7 text-muted-foreground">
-                                                <li><strong>Temperature:</strong> Store in a cool, dry, well-ventilated area below 25°C.</li>
-                                                <li><strong>Humidity:</strong> Keep in a low-humidity environment to prevent degradation.</li>
-                                                <li><strong>Light Protection:</strong> Avoid direct sunlight to preserve stability.</li>
+                                                <li><strong>Temperature:</strong> Store in a cool, dry, and well-ventilated area. The ideal temperature is below *25°C (77°F).</li>
+                                                <li><strong>Humidity:</strong>Keep the product in a low-humidity environment to prevent degradation.</li>
+                                                <li><strong>Light Protection:</strong> Store away from direct sunlight, as light can degrade nicotine sulfate and reduce its effectiveness.</li>
                                             </ul>
                                         </LeafCard>
                                         <LeafCard className="bg-linear-to-br from-emerald-50 via-emerald-100 to-cyan-100 p-8 text-foreground rounded-[2.5rem] shadow-soft border border-cyan-200" delay={0.1}>
                                             <h4 className="font-semibold mb-4 text-lg text-foreground">Container Requirements</h4>
                                             <ul className="list-disc pl-5 space-y-3 text-sm leading-7 text-muted-foreground">
-                                                <li><strong>Original Packaging:</strong> Use the original sealed container to prevent leaks and exposure.</li>
-                                                <li><strong>Material Compatibility:</strong> Prefer corrosion-resistant materials; avoid reactive metals/plastics.</li>
-                                                <li><strong>Labeling:</strong> Ensure visible labels with usage, hazards, and regulatory details.</li>
+                                                <li><strong>Original Packaging:</strong> Always store the pesticide in its original, tightly sealed container to prevent leaks and accidental exposure.</li>
+                                                <li><strong>Material Compatibility:</strong> Ensure containers are made of corrosion-resistant materials, as nicotine sulfate may react with certain metals or plastics.</li>
+                                                <li><strong>Labeling:</strong>The container must have a clearly visible label with usage instructions, hazards, and regulatory information.</li>
                                             </ul>
                                         </LeafCard>
                                         <LeafCard className="bg-linear-to-br from-slate-50 via-slate-100 to-sky-100 p-8 text-foreground rounded-[2.5rem] shadow-soft border border-slate-200" delay={0.2}>
                                             <h4 className="font-semibold mb-4 text-lg text-foreground">Segregation & Security</h4>
                                             <ul className="list-disc pl-5 space-y-3 text-sm leading-7 text-muted-foreground">
-                                                <li>Store separately from food, beverages, and medical supplies.</li>
-                                                <li>Restrict access and use locked storage for high-risk materials.</li>
-                                                <li>Keep away from flammable or reactive chemicals.</li>
+                                                <li>Store separately from food, animal feed, beverages, and medical supplies to avoid contamination.</li>
+                                                <li>Keep away from flammable or reactive chemicals to reduce the risk of dangerous interactions.</li>
+                                                <li>Store in a locked cabinet or storage room to prevent unauthorized access by children, pets, or untrained individuals.</li>
                                             </ul>
                                         </LeafCard>
                                     </motion.div>
@@ -392,7 +393,7 @@ export default function ProductsPage() {
                             <LeafCard className="bg-linear-to-br from-yellow-50 via-yellow-100 to-amber-100 p-8 text-foreground rounded-[2.5rem] shadow-glow border border-yellow-200" delay={0.1}>
                                 <h3 className="text-2xl font-semibold text-foreground mb-4">Fire Safety</h3>
                                 <ul className="list-disc pl-5 space-y-3 text-sm text-muted-foreground leading-7">
-                                    <li><strong>Fire Risk:</strong> Nicotine sulfate is not highly flammable, but vapors may be hazardous if heated.</li>
+                                    <li><strong>Fire Risk:</strong> Nicotine  is not highly flammable, but vapors may be hazardous if heated.</li>
                                     <li>Store away from open flames, heat sources, and ignition points.</li>
                                     <li>Keep appropriate fire extinguishing equipment nearby.</li>
                                 </ul>

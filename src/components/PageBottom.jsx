@@ -80,10 +80,10 @@ export function ContactSection() {
                 <div className="text-background/50 uppercase tracking-wider text-xs">Address</div>
                 <div className="mt-1">Sr No.538, Ashapuri-Changa Road,</div>
                 <div className="mt-1">Vill-Kasor, Ta-Sojitra, Anand — 388460</div>
+                <div className="mt-1">Gujarat India</div>
               </div>
             </div>
           </motion.div>
-
           <motion.form
             className="contact-form lg:col-span-6 grid gap-4"
             initial={{ opacity: 0, y: 24 }}

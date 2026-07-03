@@ -110,6 +110,7 @@ function FaqItem({ item, index, openIndex, setOpenIndex }) {
 export default function Contact() {
     const [submitted, setSubmitted] = useState(false);
     const [faqOpen, setFaqOpen] = useState(null);
+    const [copiedPhone, setCopiedPhone] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -117,6 +118,14 @@ export default function Contact() {
         message: '',
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    function handlePhoneClick(rawNumber) {
+        navigator.clipboard.writeText(rawNumber).then(() => {
+            setCopiedPhone(true);
+            setTimeout(() => setCopiedPhone(false), 2000);
+        });
+        // tel: href still fires normally alongside this, so mobile devices open the dialer
+    }
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -321,6 +330,9 @@ export default function Contact() {
                                         ),
                                         label: "Call us at",
                                         value: "+91 79900 82565",
+                                        href: "tel:+917990082565",
+                                        type: "phone",
+                                        raw: "+917990082565",
                                     },
                                     {
                                         icon: (
@@ -330,6 +342,8 @@ export default function Contact() {
                                         ),
                                         label: "Email us",
                                         value: "info@okhaipharma.com",
+                                        href: "https://mail.google.com/mail/?view=cm&fs=1&to=info@okhaipharma.com",
+                                        type: "email",
                                     },
                                     {
                                         icon: (
@@ -339,26 +353,34 @@ export default function Contact() {
                                             </svg>
                                         ),
                                         label: "Office",
-                                        value: "Sr No.538, Ashapuri-Changa Road\nVill-Kasor, Ta-Sojitra, Anand — 388460",
+                                        value: "Sr No.538, Ashapuri-Changa Road,Vill-Kasor, Ta-Sojitra, Anand — 388460,Gujarat-India.",
+                                        href: "https://www.google.com/maps/place/Okhai+Pharma+Intermediates+Pvt+Ltd/@22.5653178,72.7863326,804m/data=!3m2!1e3!4b1!4m6!3m5!1s0x395e5700556aa1b1:0xb31c0bffa3a47fab!8m2!3d22.5653178!4d72.7863326!16s%2Fg%2F11xckx_vv1?entry=ttu&g_ep=EgoyMDI2MDYyOC4wIKXMDSoASAFQAw%3D%3D",
+                                        type: "map",
                                     },
-                                ].map(({ icon, label, value }, i) => (
-                                    <motion.div
+                                ].map(({ icon, label, value, href, type, raw }, i) => (
+                                    <motion.a
                                         key={label}
+                                        href={href}
+                                        target={type !== "phone" ? "_blank" : undefined}
+                                        rel={type !== "phone" ? "noopener noreferrer" : undefined}
+                                        onClick={type === "phone" ? () => handlePhoneClick(raw) : undefined}
                                         initial={{ opacity: 0, x: 16 }}
                                         whileInView={{ opacity: 1, x: 0 }}
                                         viewport={{ once: true }}
                                         transition={{ delay: 0.2 + i * 0.1, duration: 0.45 }}
-                                        className="flex items-start gap-4 group"
+                                        whileHover={{ x: 3 }}
+                                        className="flex items-start gap-4 group cursor-pointer"
                                     >
-                                        {/* Icon bubble */}
                                         <div className="shrink-0 w-10 h-10 rounded-xl bg-white/10 group-hover:bg-emerald-400/20 border border-white/15 flex items-center justify-center text-emerald-300 transition-colors duration-200">
                                             {icon}
                                         </div>
                                         <div>
-                                            <p className="text-xs text-white/50 font-medium uppercase tracking-wider">{label}</p>
-                                            <p className="mt-0.5 text-sm font-bold text-white leading-snug whitespace-pre-line">{value}</p>
+                                            <p className="text-xs text-white/50 font-medium uppercase tracking-wider">
+                                                {type === "phone" && copiedPhone ? "Copied!" : label}
+                                            </p>
+                                            <p className="mt-0.5 text-sm font-bold text-white leading-snug whitespace-pre-line group-hover:underline">{value}</p>
                                         </div>
-                                    </motion.div>
+                                    </motion.a>
                                 ))}
                             </div>
                         </motion.div>
@@ -430,7 +452,7 @@ export default function Contact() {
                         </motion.div>
 
                         <p className="mt-4 text-sm text-muted-foreground text-center font-medium">
-                            Sr No.538, Ashapuri-Changa Road, Vill-Kasor, Ta-Sojitra, Dis-Anand, Pin-388460
+                            Sr No.538, Ashapuri-Changa Road,Vill-Kasor, Ta-Sojitra, Anand — 388460,Gujarat-India.
                         </p>
                     </div>
                 </motion.section>
