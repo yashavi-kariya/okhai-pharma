@@ -3,8 +3,71 @@ import AdminUser from '../models/AdminUser.js';
 import Inquiry from '../models/Inquiry.js';
 import { comparePassword } from '../auth.js';
 import { normalizeInquiryPayload } from '../inquiryUtils.js';
+import { createCaptchaChallenge, verifyCaptcha as verifyCaptchaUtil, clearCaptcha } from '../captcha.js';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'okhai-admin-secret';
+
+export async function createInquiry(req, res) {
+    try {
+        const { captchaId, captchaInput, captchaVerified } = req.body;
+
+        // If captchaVerified is true, skip verification (already done by frontend)
+        // If captchaId is present but captchaVerified is false, verify on backend
+        if (captchaId && !captchaVerified) {
+            const result = verifyCaptchaUtil(captchaId, captchaInput);
+
+            if (!result.valid) {
+                clearCaptcha(captchaId);
+                return res.status(400).json({
+                    success: false,
+                    message: result.error || 'CAPTCHA verification failed.'
+                });
+            }
+        }
+
+        const inquiry = normalizeInquiryPayload(req.body || {});
+        inquiry.captchaVerification = captchaVerified ? 'verified' : 'pending';
+
+        const saved = await Inquiry.create(inquiry);
+        res.status(201).json({ success: true, inquiry: saved });
+    } catch (err) {
+        res.status(500).json({ message: 'Unable to save inquiry.', error: err.message });
+    }
+}
+
+export function generateCaptcha(req, res) {
+    try {
+        const { id, captcha } = createCaptchaChallenge();
+        res.json({
+            id,
+            captcha: captcha,
+            expiresAt: 300
+        });
+    } catch (err) {
+        res.status(500).json({ message: 'Failed to generate CAPTCHA', error: err.message });
+    }
+}
+
+export function verifyCaptcha(req, res) {
+    try {
+        const { id, input } = req.body;
+
+        if (!id || !input) {
+            return res.status(400).json({ valid: false, error: 'Missing CAPTCHA ID or input' });
+        }
+
+        const result = verifyCaptchaUtil(id, input);
+
+        if (!result.valid) {
+            clearCaptcha(id);
+            return res.status(400).json({ valid: false, error: result.error });
+        }
+
+        res.json({ valid: true });
+    } catch (err) {
+        res.status(500).json({ valid: false, error: err.message });
+    }
+}
 
 export async function login(req, res) {
     const { email, password } = req.body || {};
@@ -42,16 +105,6 @@ export async function me(req, res) {
 
 export async function logout(req, res) {
     res.json({ message: 'Logged out successfully.' });
-}
-
-export async function createInquiry(req, res) {
-    try {
-        const inquiry = normalizeInquiryPayload(req.body || {});
-        const saved = await Inquiry.create(inquiry);
-        res.status(201).json({ success: true, inquiry: saved });
-    } catch (err) {
-        res.status(500).json({ message: 'Unable to save inquiry.', error: err.message });
-    }
 }
 
 export async function listInquiries(req, res) {
@@ -94,4 +147,4 @@ export async function deleteInquiry(req, res) {
     }
 }
 
-export default { login, me, logout, createInquiry, listInquiries, deleteInquiry };
+export default { login, me, logout, createInquiry, listInquiries, deleteInquiry, generateCaptcha, verifyCaptcha };

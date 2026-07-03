@@ -1,9 +1,10 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import { Play, Pause, Volume2, VolumeX } from "lucide-react";
 import heroBg from "@/assets/hero-bg.jpg";
 import leafDetail from "@/assets/leaf-detail.jpg";
 import leafIcon from "@/assets/leaf.png";
-import aboutImg from "@/assets/aboutimg.png";
+import aboutVideo from "@/assets/productprocess.mp4"; // adjust filename to your actual video asset
 import companyLogo from "@/assets/logo.png";
 import { MeshBlobs, DotGrid, GridLines, FloatingLeaves, SweepBeam, Particles } from "./animated-bg";
 import SiteNav from "./SiteHeader";
@@ -42,6 +43,70 @@ function useAboutReveal() {
     return { imageRef, contentRef, imageAnim, contentAnim };
 }
 
+/* ─── AboutHeroVideo ────────────────────────────────────────────────── */
+function AboutHeroVideo() {
+    const videoRef = useRef(null);
+    const [isPlaying, setIsPlaying] = useState(true);
+    const [isMuted, setIsMuted] = useState(true);
+
+    const togglePlay = () => {
+        const video = videoRef.current;
+        if (!video) return;
+        if (video.paused) {
+            video.play();
+            setIsPlaying(true);
+        } else {
+            video.pause();
+            setIsPlaying(false);
+        }
+    };
+
+    const toggleMute = () => {
+        const video = videoRef.current;
+        if (!video) return;
+        video.muted = !video.muted;
+        setIsMuted(video.muted);
+    };
+
+    return (
+        <div className="relative aspect-video w-full overflow-hidden rounded-[2.5rem] bg-neutral-900">
+            <video
+                ref={videoRef}
+                src={aboutVideo}
+                className="absolute inset-0 w-full h-full block"
+                style={{ objectFit: "cover", objectPosition: "center" }}
+                autoPlay
+                loop
+                muted={isMuted}
+                playsInline
+                onClick={togglePlay}
+            />
+
+            {/* Bottom gradient scrim for control legibility */}
+            <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black/55 via-black/15 to-transparent" />
+
+            {/* Controls */}
+            <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
+                <button
+                    onClick={togglePlay}
+                    className="w-10 h-10 rounded-full bg-white/15 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-white/25 active:scale-95 transition-all"
+                    aria-label={isPlaying ? "Pause video" : "Play video"}
+                >
+                    {isPlaying ? <Pause size={16} /> : <Play size={16} className="ml-0.5" />}
+                </button>
+
+                <button
+                    onClick={toggleMute}
+                    className="w-10 h-10 rounded-full bg-white/15 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-white/25 active:scale-95 transition-all"
+                    aria-label={isMuted ? "Unmute video" : "Mute video"}
+                >
+                    {isMuted ? <VolumeX size={16} /> : <Volume2 size={16} />}
+                </button>
+            </div>
+        </div>
+    );
+}
+
 function AboutHero() {
     const { imageRef, contentRef, imageAnim, contentAnim } = useAboutReveal();
 
@@ -74,11 +139,7 @@ function AboutHero() {
                     </motion.div>
 
                     <motion.div ref={imageRef} className="lg:col-span-6 relative" {...imageAnim}>
-                        <div className="relative mx-auto max-w-md rounded-[3rem] border border-primary/10 bg-white/90 p-6 shadow-elevated backdrop-blur-xl">
-                            <div className="absolute -right-8 top-8 rounded-full border border-primary/20 bg-white p-4 shadow-soft">
-                                <div className="text-[10px] uppercase tracking-[0.24em] text-primary">Trusted</div>
-                                <div className="mt-1 text-sm font-semibold text-foreground">Globally</div>
-                            </div>
+                        <div className="relative mx-auto max-w-2xl rounded-[3rem] border border-primary/10 bg-white/90 p-8 shadow-elevated backdrop-blur-xl">
                             <motion.div
                                 className="overflow-hidden rounded-[2.5rem] bg-slate-100"
                                 initial={{ y: 20, opacity: 0.8, scale: 0.98 }}
@@ -87,7 +148,7 @@ function AboutHero() {
                                 transition={{ duration: 0.9, ease: EASE }}
                                 whileHover={{ scale: 1.02 }}
                             >
-                                <img src={aboutImg} alt="About Okhai Pharma" className="w-full h-full object-cover" loading="lazy" />
+                                <AboutHeroVideo />
                             </motion.div>
                         </div>
                     </motion.div>

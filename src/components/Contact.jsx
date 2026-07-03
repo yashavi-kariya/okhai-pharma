@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useRef, useState } from "react";
-import { apiCall } from "@/utils/api";
+import { useRef, useState, useEffect } from "react";
+import { apiCall, API_BASE_URL } from "@/utils/api";
 import SiteNav from "./SiteHeader";
 import { MeshBlobs, DotGrid, GridLines, FloatingLeaves } from "./animated-bg";
 import "../responsive.css";
@@ -118,6 +118,27 @@ export default function Contact() {
         message: '',
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [captchaId, setCaptchaId] = useState("");
+    const [captchaInput, setCaptchaInput] = useState("");
+    const [captchaError, setCaptchaError] = useState("");
+    const [serverCaptcha, setServerCaptcha] = useState("");
+
+    useEffect(() => {
+        // Fetch CAPTCHA from server
+        const fetchCaptcha = async () => {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/admin/captcha/generate`);
+                if (response.ok) {
+                    const data = await response.json();
+                    setCaptchaId(data.id);
+                    setServerCaptcha(data.captcha);
+                }
+            } catch (error) {
+                console.error('Failed to fetch CAPTCHA:', error);
+            }
+        };
+        fetchCaptcha();
+    }, []);
 
     function handlePhoneClick(rawNumber) {
         navigator.clipboard.writeText(rawNumber).then(() => {
@@ -129,21 +150,67 @@ export default function Contact() {
 
     async function handleSubmit(e) {
         e.preventDefault();
+
+        if (!captchaId || !captchaInput) {
+            setCaptchaError("Please enter CAPTCHA.");
+            return;
+        }
+
         setIsSubmitting(true);
+        setCaptchaError("");
 
         try {
+            // First verify CAPTCHA with server
+            const verifyResponse = await fetch(`${API_BASE_URL}/api/admin/captcha/verify`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    id: captchaId,
+                    input: captchaInput,
+                }),
+            });
+
+            const verifyResult = await verifyResponse.json();
+
+            if (!verifyResult.valid) {
+                setCaptchaError(verifyResult.error || "Incorrect CAPTCHA.");
+                // Fetch new CAPTCHA
+                const newCaptchaResponse = await fetch(`${API_BASE_URL}/api/admin/captcha/generate`);
+                const newData = await newCaptchaResponse.json();
+                setCaptchaId(newData.id);
+                setServerCaptcha(newData.captcha);
+                setCaptchaInput("");
+                setIsSubmitting(false);
+                return;
+            }
+
+            // CAPTCHA verified, now submit inquiry
             await apiCall('/api/admin/inquiries', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     ...formData,
                     sourcePage: 'contact',
+                    captchaId,
+                    captchaVerified: true,
                 }),
             });
+
             setSubmitted(true);
             setFormData({ name: '', email: '', subject: '', message: '' });
+            setCaptchaInput("");
+
+            // Fetch new CAPTCHA
+            const newCaptchaResponse = await fetch(`${API_BASE_URL}/api/admin/captcha/generate`);
+            const newData = await newCaptchaResponse.json();
+            setCaptchaId(newData.id);
+            setServerCaptcha(newData.captcha);
+
         } catch (error) {
             console.error(error);
+            setCaptchaError("Failed to submit inquiry. Please try again.");
         } finally {
             setIsSubmitting(false);
             setTimeout(() => setSubmitted(false), 4000);
@@ -250,6 +317,30 @@ export default function Contact() {
                                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                                     className={`${inputCls} resize-none`}
                                 />
+                            </div>
+
+                            {/* CAPTCHA */}
+                            <div>
+                                <label className={labelCls}>Security Check <span className="text-red-400">*</span></label>
+                                <div className="flex items-center gap-3">
+                                    <div className="flex-shrink-0 h-12 px-4 bg-muted/50 border border-border rounded-xl flex items-center justify-center font-mono text-lg font-bold text-foreground tracking-widest select-none">
+                                        {serverCaptcha || "Loading..."}
+                                    </div>
+                                    <input
+                                        type="text"
+                                        placeholder="Enter code"
+                                        value={captchaInput}
+                                        onChange={(e) => {
+                                            setCaptchaInput(e.target.value);
+                                            setCaptchaError("");
+                                        }}
+                                        required
+                                        className={`${inputCls} flex-1`}
+                                    />
+                                </div>
+                                {captchaError && (
+                                    <p className="mt-2 text-xs text-red-500 font-medium">{captchaError}</p>
+                                )}
                             </div>
 
                             {/* Consent */}

@@ -5,6 +5,8 @@ const API_BASE_URL =
     import.meta.env.VITE_API_URL ||
     (typeof window !== 'undefined' ? `${window.location.origin}` : '');
 
+export { API_BASE_URL };
+
 export const apiCall = async (endpoint, options = {}) => {
     const url = `${API_BASE_URL}${endpoint}`;
 

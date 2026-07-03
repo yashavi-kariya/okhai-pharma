@@ -119,7 +119,7 @@ export default function Hero() {
     const { ref, activeIndex, bgY, bgOpacity } = useHeroSlider();
 
     return (
-        <section id="top" ref={ref} className="hero-section relative min-h-screen bg-hero overflow-hidden pt-24">
+        <section id="top" ref={ref} className="hero-section relative bg-hero overflow-hidden pt-24">
             <motion.img src={heroBg} alt="" aria-hidden
                 className="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-multiply"
                 style={{ y: bgY, opacity: bgOpacity }} />

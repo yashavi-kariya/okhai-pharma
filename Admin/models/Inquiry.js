@@ -8,6 +8,7 @@ const inquirySchema = new mongoose.Schema(
         message: { type: String, default: '' },
         sourcePage: { type: String, enum: ['contact', 'product'], default: 'contact' },
         productName: { type: String, default: '' },
+        captchaVerification: { type: String, default: 'pending' }, // pending, verified, failed
     },
     { timestamps: true }
 );

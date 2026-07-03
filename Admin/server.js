@@ -5,7 +5,6 @@ import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 import { fileURLToPath } from 'node:url';
 import { comparePassword, createPasswordHash } from './auth.js';
-import { normalizeInquiryPayload } from './inquiryUtils.js';
 import AdminUser from './models/AdminUser.js';
 import Inquiry from './models/Inquiry.js';
 import adminRoutes from './routes/adminRoutes.js';
@@ -13,12 +12,19 @@ import adminRoutes from './routes/adminRoutes.js';
 const envPath = fileURLToPath(new URL('./.env', import.meta.url));
 dotenv.config({ path: envPath });
 const app = express();
+
+// Support multiple frontend URLs separated by commas
+const FRONTEND_URLS = process.env.FRONTEND_URL
+    ? process.env.FRONTEND_URL.split(',').map(url => url.trim())
+    : ['http://localhost:5173', 'https://okhai-pharma.vercel.app/'];
+
 app.use(
     cors({
-        origin: process.env.FRONTEND_URL,
+        origin: FRONTEND_URLS,
         credentials: true,
     })
 );
+
 app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
@@ -102,29 +108,6 @@ app.get('/api/admin/me', async (req, res) => {
 
 app.post('/api/admin/logout', (req, res) => {
     res.json({ message: 'Logged out successfully.' });
-});
-
-app.post('/api/admin/inquiries', async (req, res) => {
-    try {
-        const inquiry = normalizeInquiryPayload(req.body || {});
-        const savedInquiry = await Inquiry.create(inquiry);
-        res.status(201).json({ success: true, inquiry: savedInquiry });
-    } catch (error) {
-        res.status(500).json({ message: 'Unable to save inquiry.', error: error.message });
-    }
-});
-
-app.get('/api/admin/inquiries', async (req, res) => {
-    try {
-        const filter = {};
-        const sourcePage = req.query.sourcePage;
-        if (sourcePage) filter.sourcePage = sourcePage;
-
-        const inquiries = await Inquiry.find(filter).sort({ createdAt: -1 });
-        res.json({ inquiries });
-    } catch (error) {
-        res.status(500).json({ message: 'Unable to load inquiries.', error: error.message });
-    }
 });
 
 async function startServer() {

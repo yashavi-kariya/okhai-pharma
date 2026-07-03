@@ -1,9 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { apiCall } from "@/utils/api";
+import { apiCall, API_BASE_URL } from "@/utils/api";
 import { DotGrid, FloatingLeaves } from "./animated-bg";
+import QuickAccessHub from "./QuickAccessHub";
 
+const generateCaptcha = () => {
+  const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  let text = "";
+
+  for (let i = 0; i < 6; i++) {
+    text += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+
+  return text;
+};
 export function ContactSection() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -23,27 +34,100 @@ export function ContactSection() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [captchaId, setCaptchaId] = useState("");
+  const [captchaInput, setCaptchaInput] = useState("");
+  const [captchaError, setCaptchaError] = useState("");
+  const [serverCaptcha, setServerCaptcha] = useState("");
+
+  useEffect(() => {
+    // Fetch CAPTCHA from server
+    const fetchCaptcha = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/admin/captcha/generate`);
+        if (response.ok) {
+          const data = await response.json();
+          setCaptchaId(data.id);
+          setServerCaptcha(data.captcha);
+        }
+      } catch (error) {
+        console.error('Failed to fetch CAPTCHA:', error);
+      }
+    };
+    fetchCaptcha();
+  }, []);
 
   async function handleSubmit(e) {
     e.preventDefault();
+
+    if (!captchaId || !captchaInput) {
+      setCaptchaError("Please enter CAPTCHA.");
+      return;
+    }
+
+    // First verify CAPTCHA with server
     setIsSubmitting(true);
 
     try {
-      await apiCall('/api/admin/inquiries', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const verifyResponse = await fetch(`${API_BASE_URL}/api/admin/captcha/verify`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: captchaId,
+          input: captchaInput,
+        }),
+      });
+
+      const verifyResult = await verifyResponse.json();
+
+      if (!verifyResult.valid) {
+        setCaptchaError(verifyResult.error || "Incorrect CAPTCHA.");
+        // Fetch new CAPTCHA
+        const newCaptchaResponse = await fetch(`${API_BASE_URL}/api/admin/captcha/generate`);
+        const newData = await newCaptchaResponse.json();
+        setCaptchaId(newData.id);
+        setServerCaptcha(newData.captcha);
+        setCaptchaInput("");
+        setIsSubmitting(false);
+        return;
+      }
+
+      // CAPTCHA verified, now submit inquiry
+      const response = await apiCall("/api/admin/inquiries", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           ...formData,
           sourcePage,
           productName,
+          captchaId,
+          captchaVerified: true,
         }),
       });
 
       setSubmitted(true);
-      setFormData({ name: "", email: "", subject: "", message: "" });
+
+      setFormData({
+        name: "",
+        email: "",
+        subject: "",
+        message: "",
+      });
+
+      // Fetch new CAPTCHA
+      const newCaptchaResponse = await fetch(`${API_BASE_URL}/api/admin/captcha/generate`);
+      const newData = await newCaptchaResponse.json();
+      setCaptchaId(newData.id);
+      setServerCaptcha(newData.captcha);
+      setCaptchaInput("");
+
       setTimeout(() => setSubmitted(false), 4000);
     } catch (error) {
       console.error(error);
+      setCaptchaError("Failed to submit inquiry. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -135,6 +219,94 @@ export function ContactSection() {
                 className="w-full bg-background/10 border border-background/20 rounded-xl px-4 py-3 text-background placeholder:text-background/40 focus:outline-none focus:border-primary focus:bg-background/20 transition-all resize-none"
               />
             </label>
+            <div className="space-y-4">
+
+              <div className="text-xs uppercase tracking-wider text-background/60">
+                Verification
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-3">
+
+                <div
+                  className="relative flex items-center justify-center
+      min-w-[190px] h-14 rounded-xl
+      bg-white text-gray-900 overflow-hidden
+      border border-gray-300 select-none"
+                >
+                  {/* Background Lines */}
+                  <div className="absolute inset-0 opacity-20">
+                    <svg width="100%" height="100%">
+                      {[...Array(8)].map((_, i) => (
+                        <line
+                          key={i}
+                          x1={Math.random() * 220}
+                          y1={Math.random() * 60}
+                          x2={Math.random() * 220}
+                          y2={Math.random() * 60}
+                          stroke="black"
+                          strokeWidth="1"
+                        />
+                      ))}
+                    </svg>
+                  </div>
+
+                  <div className="relative flex gap-1 text-2xl font-black tracking-[5px]">
+                    {serverCaptcha.split("").map((char, index) => (
+                      <span
+                        key={index}
+                        style={{
+                          transform: `rotate(${Math.random() * 30 - 15}deg)`,
+                          display: "inline-block",
+                        }}
+                      >
+                        {char}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={async () => {
+                    try {
+                      const response = await fetch(`${API_BASE_URL}/api/admin/captcha/generate`);
+                      const data = await response.json();
+                      setCaptchaId(data.id);
+                      setServerCaptcha(data.captcha);
+                      setCaptchaInput("");
+                      setCaptchaError("");
+                    } catch (error) {
+                      console.error('Failed to refresh CAPTCHA:', error);
+                    }
+                  }}
+                  className="rounded-xl px-5 bg-background/10 border border-background/20
+      hover:bg-background/20 transition-all"
+                >
+                  ↻ Refresh
+                </button>
+
+              </div>
+
+              <input
+                type="text"
+                required
+                value={captchaInput}
+                onChange={(e) => setCaptchaInput(e.target.value.toUpperCase())}
+                placeholder="Enter CAPTCHA"
+                className="w-full bg-background/10 border border-background/20 rounded-xl
+                    px-4 py-3 text-background
+                    placeholder:text-background/40
+                    focus:outline-none
+                    focus:border-primary
+                    focus:bg-background/20"
+              />
+              {captchaError && (
+                <p className="text-red-400 text-sm">
+                  {captchaError}
+                </p>
+              )}
+
+            </div>
             <div className="flex flex-wrap items-center gap-3">
               <button
                 type="submit"
@@ -199,19 +371,16 @@ export function SiteFooter() {
     </footer>
   );
 }
+
 export default function PageBottom({ showContact = true, showFooter = true }) {
   return (
     <>
       {showContact && <ContactSection />}
       {showFooter && <SiteFooter />}
-      <button
-        type="button"
-        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        aria-label="Scroll to top"
-        className="fixed bottom-6 right-6 z-50 inline-flex h-12 w-12 items-center justify-center rounded-full bg-emerald-700 text-white shadow-lg shadow-emerald-700/20 transition hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-300"
-      >
-        ↑
-      </button>
+      {/* Leaf FAB + Quick Access Hub panel. PageBottom is rendered on
+          every page, so mounting it here makes it global for free —
+          it replaces the old plain scroll-to-top button (same corner). */}
+      <QuickAccessHub />
     </>
   );
 }
